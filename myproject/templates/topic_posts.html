@@ -5,53 +5,118 @@
 {% load static %}
 
 {% block title %}{{ topic.subject }}{% endblock %}
-
+<!-- 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
     <li class="breadcrumb-item"><a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a></li>
     <li class="breadcrumb-item active">{{ topic.subject }}</li>
-{% endblock %}
+{% endblock %} -->
 
 {% block content %}
 
+<!--== Page Content Wrapper Start ==-->
+    <div id="page-content-wrapper">
+        <div class="container">
+            <div class="single-product-page-content">
+                <div class="row">
+                    <!-- Product Thumbnail Start -->
+                    <!-- Product Thumbnail End -->
+    
+                    <!-- Product Details Start -->
+                    <div class="col-lg-7">
+                        <div class="product-details sidebar-active">
+                            <h2><a href="#brief">{{ topic.subject }}</a></h2>
+                            <div class="product-info-stock-sku">
+                                <a href="info.html" class="product-stock-status text-success">{{ posts.first.created_by.username }}</a>
+                                <img src="{% static 'img/usr.png' %}" alt="头像" class="ml-3 rounded-circle w-30">
+                            </div>
+    
+                            <p id="brief" class="products-desc">{{ posts.first.message }}</p>
+    
+                            <div class="product-quantity d-flex align-items-center">
+                                <a href="cart.html" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>收藏</a>
+                                <a href="#write-comment" class="btn btn-cart-large"><i class="fa fa-comment"></i>评论</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Details End -->
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Product Full Description Start -->
+                        <div class="product-full-info-reviews">
+                            <!-- Single Product tab Menu -->
+                            <nav class="nav" id="nav-tab">
+                                <a class="active" id="reviews-tab" data-toggle="tab" href="#reviews">评论</a>
+                            </nav>
+                            <!-- Single Product tab Menu -->
+                            <!-- Single Product tab Content -->
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="reviews">
+                                    <div class="row">
+                                        <div class="col-lg-7">
+                                            <div class="product-ratting-wrap">
+                                                <!-- Comment Area Start -->
+                                                <div class="comment-area-wrapper">
+                                                    <div class="comments-preview-area comment-single-item">
+                                                        <h2>评论({{posts.count - 1}})</h2>
+                                                        {% for post in posts%}
+                                                            {% if not forloop.first %}
+
+                                                                <div class="single-comment d-block d-md-flex">
+                                                                    <div class="comment-author">
+                                                                        <a href="info.html"><img src="{% static 'img/usr.png' %}" class="img-fluid" alt="头像"/></a>
+                                                                    </div>
+                                                                    <div class="comment-info mt-3 mt-md-0">
+                                                                        <div class="comment-info-top d-flex justify-content-between">
+                                                                            <a href="info.html"><h3>{{ post.created_by.username }}<h3></a>
+                                                                            <a href="#" class="btn-reply"><i class="fa fa-reply"></i>回复</a>
+                                                                        </div>
+                                                                        <a class="comment-date">{{ post.updated_at }}</a>
+                                                                        <p>{{ post.get_message_as_markdown }}</p>
+                                                                        {% if post.created_by == user %}
+                                                                            <div class="mt-3">
+                                                                                <a href="{% url 'edit_post' post.topic.board.pk post.topic.pk post.pk %}"
+                                                                                    class="btn btn-primary btn-sm" 
+                                                                                    role="button">编辑</a>      
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div id="write-comment" class="leave-comment-area comment-single-item">
+                                                        <h2>发表评论</h2>
+                                                        <div class="comment-form-wrap">
+                                                            <form action="#" method="get">
+                                                                <div class="single-input-item">
+                                                                    <textarea name="comment" id="comment" cols="30" rows="6" placeholder="发表评论..."></textarea>
+                                                                </div>                       
+                                                            </form>
+                                                            <div class="single-input-item">
+                                                                <button type="submit" class="btn">提交</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single Product tab Content -->
+                        </div>
+                        <!-- Product Full Description End -->
+                    </div>
+                </div>            
+                <!-- Single Product tab Content -->
+            </div>
+        </div>
+    </div>
     <div class="mb-4">
         <a href="{% url 'reply_topic' topic.board.pk topic.pk %}" class="btn btn-primary" role="button">回复</a>
     </div>
-
-    {% for post in posts%}
-        <div id="{{ post.pk }}" class="card {% if forloop.last %}mb-4{% else %}mb-2{% endif %} {% if forloop.first %}border-dark{% endif %}">
-            {% if forloop.first %}
-                <div class="card-header text-white bg-dark py-2 px-3">{{ topic.subject }}</div>
-            {% endif %}
-            <div class="card-body p-3">
-                <div class="row">
-                    <div class="col-2">
-                        <!-- <img src="{{ post.created_by|gravatar }}" alt="{{ post.created_by.username }}" class="w-100 rounded"> -->
-                        <img src="{% static 'img/avatar.svg' %}" alt="{{ post.created_by.username }}" class="w-100">
-                        <small>回复数: {{ post.created_by.posts.count }}</small>
-                    </div>
-                    <div class="col-10">
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <strong class="text-muted">{{ post.created_by.username }}</strong>
-                            </div>
-                            <div class="col-6 text-right">
-                                <small class="text-muted">{{ post.created_at}}</small>
-                            </div>
-                        </div>
-                        {{ post.get_message_as_markdown }}
-                        {% if post.created_by == user %}
-                            <div class="mt-3">
-                                <a href="{% url 'edit_post' post.topic.board.pk post.topic.pk post.pk %}"
-                                    class="btn btn-primary btn-sm" 
-                                    role="button">编辑</a>      
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
 
     {% include 'includes/pagination.html' %}
 
