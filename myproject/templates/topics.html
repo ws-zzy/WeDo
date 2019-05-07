@@ -7,6 +7,7 @@
   {{ board.name }} - {{ block.super }}
 {% endblock %}
 
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
   <li class="breadcrumb-item active">{{ board.name }}</li>
@@ -21,6 +22,7 @@
     <thead class="thead-inverse">
       <tr>
         <th>主题</th>
+        <th>创意介绍</th>
         <th>发起人</th>
         <th>回复数</th>
         <th>浏览次数</th>
@@ -31,7 +33,23 @@
       {% for topic in topics %}
         {% url 'topic_posts' board.pk topic.pk as topic_url %}
         <tr>
-          <td>
+          <td>		
+          <div class="col-md-3 col-lg-3 mt-xs-3">			
+                <div class="single-product-item">
+                    <figure class="product-thumb">
+                        <a href="{{ topic_url }}"><img src="https://img2018.cnblogs.com/blog/1628230/201905/1628230-20190506133502179-964943521.jpg"
+                                                                               alt="Product"></a>
+                        <a href="idea-detail.html" class="btn btn-round btn-cart" title="Quick View"><i
+                                                class="fa fa-eye"></i></a>
+                    </figure>
+                    <div class="product-details">
+                        <h2 class="product-title"><a href="single-product.html">{{ topic.board.name }}
+                                                </a></h2>
+                        <p class="pro-desc"><br /></p>
+                    </div>
+                </div>
+             </div>                  	
+
             <p class="mb-0">
               <a href="{{ topic_url }}">{{ topic.subject }}</a>
             </p>
@@ -45,6 +63,7 @@
               {% endif %}
             </small>
           </td>
+          <td class="align-middle">{{ topic.board.description }}</td>
           <td class="align-middle">{{ topic.starter.username }}</td>
           <td class="align-middle">{{ topic.replies }}</td>
           <td class="align-middle">{{ topic.views }}</td>
@@ -53,6 +72,7 @@
       {% endfor %}
     </tbody>
   </table>
+
 
   {% include 'includes/pagination.html' %}
 

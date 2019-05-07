@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery-1.11.0.min.js"></script>
+</head>
+<body>
+    <input type = "text" id = "uid" /><span id="ts"></span>
+</body>
+<script type="text/javascript">
+    $("#uid").blur(function(){
+        var uid = $(this).val();
+        $.ajax({
+            type:"POST",
+            url:"../../www/controller/testAjax.php",
+            data:{
+                userId : uid
+            },
+            contentType:"application/json",
+            dataType:"json",
+            success:function(data){
+                if(data == 1){
+                    $("#ts").html("用户名可用");
+                    $("#ts").css("color","green");
+                }
+                else{
+                    $("#ts").html("该用户名不可用");
+                    $("#ts").css("color","red");
+                }
+            }
+        });
+    })
+</script>
+</html>

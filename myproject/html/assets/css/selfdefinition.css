@@ -1,0 +1,84 @@
+#info-tab-content{
+	height: 684px; 
+	overflow-y: scroll;
+}
+#info-tab-card{
+	margin-top: 40px;
+}
+
+.carousel-inner img {
+  width: 100%;
+  height: 100%;
+}
+.scrollable {
+    overflow-y: scroll;
+}
+.bg-city{
+	opacity:0.9;
+	background: url("../img/city.jpg");
+	background-repeat:no-repeat; 
+	background-size: 100% 100%; 
+	background-attachment: fixed;
+}
+.bg-holiday{
+	opacity:0.9;
+    background: url("../img/holiday.jpg");
+    background-repeat:no-repeat; 
+    background-size: 100% 100%; 
+    background-attachment: fixed;
+}
+.big-icon
+{
+  width:50px;
+}
+.h-100{
+	height:100px;
+}
+.h-200{
+	height:200px;
+}
+.w-100{
+	width:100px;
+}
+.w-30{
+	width:30px;
+}
+.h-800{
+	height:800px;
+}
+.m-t-40{
+	margin-top:40px;
+}
+.m-t-30{
+	margin-top:30px;
+}
+.m-t-20{
+	margin-top:20px;
+}
+.m-b-40{
+	margin-bottom:40px;
+}
+.m-b-30{
+	margin-bottom:30px;
+}
+.m-b-20{
+	margin-bottom:20px;
+}
+.w-100per{
+	width:100%;
+}
+.p-20{
+	padding:20px;
+}
+.m-l-10{
+	margin-left:10px;
+}
+.m-r-10{
+	margin-right:10px;
+}
+.l-h-40{
+	line-height: 40px;
+}
+.single-product-item{
+	background: rgba(255,255,255,1);
+}
