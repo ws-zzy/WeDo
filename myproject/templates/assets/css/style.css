@@ -2942,7 +2942,7 @@ Quick View Modal Style
     -moz-transition: all 0.4s ease-out;
     -o-transition: all 0.4s ease-out;
     transition: all 0.4s ease-out;
-    position: relative; }
+    }
     .single-product-item .product-thumb a.btn-cart {
       position: absolute;
       top: 50%;
