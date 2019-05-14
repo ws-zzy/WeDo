@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}My account{% endblock %}
 
@@ -11,7 +12,7 @@
     <div class="row h-800">
 	    <div class="col-md-4 text-center">
         <div class="card m-t-40">
-          <img class="card-img-top w-100per" src="./assets/img/usr.png" alt="头像">
+          <img class="card-img-top w-100per" src={%static "assets/img/usr.png"%} alt="头像">
           <div class="card-body">
             <h4 class="card-title">昵称</h4>
             <button type="button" class="btn btn-primary" id="nick-rev" data-toggle="modal" data-target="#nick-mod" >修改昵称</button>
@@ -115,28 +116,28 @@
 
             <div id="my-follow" class="container tab-pane fade"><br>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>昵称一</h3>
                   <p>邮箱一<p>    
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>昵称二</h3>
                   <p>邮箱二<p>   
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>昵称三</h3>
                   <p>邮箱三<p>      
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>昵称四</h3>
                   <p>邮箱四<p>    
@@ -157,28 +158,28 @@
 
             <div id="my-release" class="container tab-pane fade"><br>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意一</h3>
                   <p>创意内容介绍</p>    
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意二</h3>
                   <p>创意内容介绍</p>  
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意三</h3>
                   <p>创意内容介绍</p>     
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意四</h3>
                   <p>创意内容介绍</p>   
@@ -199,28 +200,28 @@
 
             <div id="my-join" class="container tab-pane fade"><br>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意一</h3>
                   <p>创意内容介绍</p>    
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意二</h3>
                   <p>创意内容介绍</p>  
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意三</h3>
                   <p>创意内容介绍</p>     
                 </div>
               </div>
               <div class="media border p-3 mb-5 h-100">
-                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <img src={%static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
                   <h3>创意四</h3>
                   <p>创意内容介绍</p>   
@@ -361,26 +362,26 @@
   <script>
       function aaa(){
           document.getElementById("top-nickname").innerHTML = '<a href="info.html">欢迎！昵称</a>'
-          document.getElementById("top-image").innerHTML = '<img src="./assets/img/usr.png" alt="头像" class="ml-3 rounded-circle w-30">'
+          document.getElementById("top-image").innerHTML = '<img src={%static "assets/img/usr.png"%} alt="头像" class="ml-3 rounded-circle w-30">'
       }
   </script>
   <!--=== Jquery Min Js ===-->
-  <script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
+  <script src={%static "assets/js/vendor/jquery-3.3.1.min.js"%}></script>
   <!--=== Jquery Migrate Min Js ===-->
-  <script src="assets/js/vendor/jquery-migrate-1.4.1.min.js"></script>
+  <script src={%static "assets/js/vendor/jquery-migrate-1.4.1.min.js"%}></script>
   <!--=== Popper Min Js ===-->
-  <script src="assets/js/vendor/popper.min.js"></script>
+  <script src={%static "assets/js/vendor/popper.min.js"%}></script>
   <!--=== Bootstrap Min Js ===-->
-  <script src="assets/js/vendor/bootstrap.min.js"></script>
+  <script src={%static "assets/js/vendor/bootstrap.min.js"%}></script>
   <!--=== Ajax Mail Js ===-->
-  <script src="assets/js/ajax-mail.js"></script>
+  <script src={%static "assets/js/ajax-mail.js"%}></script>
   <!--=== Plugins Min Js ===-->
-  <script src="assets/js/plugins.js"></script>
+  <script src={%static "assets/js/plugins.js"%}></script>
   
   <!--=== Active Js ===-->
-  <script src="assets/js/active.js"></script>
+  <script src={%static "assets/js/active.js"%}></script>
   
   <!--=== Function Js ===-->
-  <script src="../js/sign-in.js"></script>
-  <script src="../js/sign-up.js"></script>
-  <script src="../js/info.js"></script>
+  <script src={%static "js/sign-in.js"%}></script>
+  <script src={%static "js/sign-up.js"%}></script>
+  <script src={%static "js/info.js"%}></script>
