@@ -7,13 +7,380 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-6 col-md-8 col-sm-10">
-            <form method="post" novalidate>
-                {% csrf_token %}
-                {% include 'includes/form.html' %}
-                <button type="submit" class="btn btn-success">保存修改</button>
-            </form>
+<div class="container">
+    <div class="row h-800">
+	    <div class="col-md-4 text-center">
+        <div class="card m-t-40">
+          <img class="card-img-top w-100per" src="./assets/img/usr.png" alt="头像">
+          <div class="card-body">
+            <h4 class="card-title">昵称</h4>
+            <button type="button" class="btn btn-primary" id="nick-rev" data-toggle="modal" data-target="#nick-mod" >修改昵称</button>
+          </div>
         </div>
+
+        <div class="card m-t-20">
+          <ul class="list-group">
+
+            <li class="list-group-item list-group-item-success">
+              <div class="row l-h-40">
+                <div class="col-8">
+                  <form class="form-inline">
+                    <label>邮箱:</label>
+                    <label id="mail-info">123@qq.com</label>
+                  </form>
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item list-group-item-primary">
+              <div class="row l-h-40">
+                <div class="col-8">
+                  <form class="form-inline">
+                    <label>用户名:</label>
+                    <label id="usr-info">dalige</label>
+                  </form>
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-primary disabled" id="usr-rev">修改</button>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item list-group-item-danger">
+              <div class="row l-h-40">
+                <div class="col-8">
+                  <form class="form-inline">
+                    <label>入坑时间:</label>
+                    <label id="time-info">3小时</label>
+                  </form>
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-primary disabled" id="time-rev">修改</button>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item list-group-item-warning">
+              <div class="row l-h-40"><!--不设置line-height会导致字不在列表行的垂直中间位置-->
+                <div class="col-8"><!--通过行布局来让不同组件位于同一行-->
+                  <form class="form-inline"><!--通过使用form的form-inline来让不同的组件位于同一行-->
+                    <label>密码:</label>
+                    <label id="pwd-info">********</label>
+                  </form>
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      
+      <div class="col-md-8 text-center">
+        <div id="info-tab-card" class="card">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#my-collection">收藏</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#my-follow">关注</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#my-release">我发布的项目</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#my-join">我参与的项目</a>
+            </li>
+          </ul>
+          <!-- Tab panes -->
+          <div id="info-tab-content" class="tab-content"><!--可以设计scroll安装的位置-->
+            <div id="my-collection" class="container tab-pane active"><br>
+              <div id="my-collection-show">
+              </div>
+              <div class="products-settings-option d-block d-md-flex mb-3">
+                <nav class="page-pagination">
+                  <ul id="my-collection-pages" class="pagination">
+                    <!--li><a href="#" aria-label="Previous">&laquo;</a></li>
+                    <li><a class="current" href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#" aria-label="Next">&raquo;</a></li-->
+                  </ul>
+                </nav>
+              </div>
+            </div>
+
+            <div id="my-follow" class="container tab-pane fade"><br>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>昵称一</h3>
+                  <p>邮箱一<p>    
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>昵称二</h3>
+                  <p>邮箱二<p>   
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>昵称三</h3>
+                  <p>邮箱三<p>      
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/usr.png" alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>昵称四</h3>
+                  <p>邮箱四<p>    
+                </div>
+              </div>
+              <div class="products-settings-option d-block d-md-flex mb-3">
+                <nav class="page-pagination">
+                  <ul class="pagination">
+                    <li><a href="#" aria-label="Previous">&laquo;</a></li>
+                    <li><a class="current" href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#" aria-label="Next">&raquo;</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+
+            <div id="my-release" class="container tab-pane fade"><br>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意一</h3>
+                  <p>创意内容介绍</p>    
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意二</h3>
+                  <p>创意内容介绍</p>  
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意三</h3>
+                  <p>创意内容介绍</p>     
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意四</h3>
+                  <p>创意内容介绍</p>   
+                </div>
+              </div>
+              <div class="products-settings-option d-block d-md-flex mb-3">
+                <nav class="page-pagination">
+                  <ul id="my-release-pages" class="pagination">
+                    <li><a href="#" aria-label="Previous">&laquo;</a></li>
+                    <li><a class="current" href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#" aria-label="Next">&raquo;</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+
+            <div id="my-join" class="container tab-pane fade"><br>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意一</h3>
+                  <p>创意内容介绍</p>    
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意二</h3>
+                  <p>创意内容介绍</p>  
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意三</h3>
+                  <p>创意内容介绍</p>     
+                </div>
+              </div>
+              <div class="media border p-3 mb-5 h-100">
+                <img src="./assets/img/bulb.jpg" alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                <div class="media-body">
+                  <h3>创意四</h3>
+                  <p>创意内容介绍</p>   
+                </div>
+              </div>
+              <div class="products-settings-option d-block d-md-flex mb-3">
+                <nav class="page-pagination">
+                  <ul class="pagination">
+                    <li><a href="#" aria-label="Previous">&laquo;</a></li>
+                    <li><a class="current" href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#" aria-label="Next">&raquo;</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+
+          </div><!--tab-content-->
+        </div><!--card-->
+      </div><!--col-8-->
+
     </div>
+  </div>
+  
+  <div class="modal fade" id="mail-mod">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">修改邮箱</h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form>
+          <div class="modal-body">
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text w-100">邮箱</span>
+              </div>
+              <input type="email" class="form-control" placeholder="请输入新邮箱" id="mail-input" name="mail-input" required autofocus>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+            <button type="button" class="btn btn-primary" id="mail-ok">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="nick-mod">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">修改昵称</h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form name="nickname-form">
+          <div class="modal-body">
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text w-100">昵称</span>
+              </div>
+              <input type="text" class="form-control" placeholder="请输入新昵称" id="nickname-input" name="nickname-input" required autofocus>
+            </div>  
+          </div>
+        </form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+            <button type="button" class="btn btn-primary" id="nickname-ok">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="pwd-mod">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">修改密码</h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form name="password-form">
+          <div class="modal-body">
+            <div class="input-group input-group-lg mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text w-100">密码</span>
+              </div>
+              <input type="password" class="form-control" placeholder="请输入新密码" id="password-input" name="password-input" required autofocus>
+            </div>
+            <div class="input-group input-group-lg mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text w-100">确认密码</span>
+              </div>
+              <input type="password" class="form-control" placeholder="请再次输入新密码" id="password-con-input" name="password-con-input" required>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+            <button type="button" class="btn btn-primary" id = "password-ok">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
+
+<script>
+    function check_password_form()
+    {
+      var p = /^[0-9a-zA-Z]+$/; 
+      /*var tmp = document.getElementById("password-input").value;
+      var tmp_con = document.getElementById("password-con-input").value;*/
+      var pwd = $("#password-input").val();
+      if(!p.test(pwd)){
+        alert("密码只能包含数字和字母")
+        return false;
+      }
+      if(pwd.length < 8 || pwd.length > 16){
+        alert("密码长度必须在8至16位之间");
+        return false;
+      }
+      var pwd_con = $("#password-con-input").val();
+      if(pwd != pwd_con){
+        alert("两次输入密码不一致");
+        return false;
+      }
+      return true;
+    }
+  
+  
+  
+    function check_mail_form(){
+  
+    }
+  </script>
+  
+  <script>
+      function aaa(){
+          document.getElementById("top-nickname").innerHTML = '<a href="info.html">欢迎！昵称</a>'
+          document.getElementById("top-image").innerHTML = '<img src="./assets/img/usr.png" alt="头像" class="ml-3 rounded-circle w-30">'
+      }
+  </script>
+  <!--=== Jquery Min Js ===-->
+  <script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
+  <!--=== Jquery Migrate Min Js ===-->
+  <script src="assets/js/vendor/jquery-migrate-1.4.1.min.js"></script>
+  <!--=== Popper Min Js ===-->
+  <script src="assets/js/vendor/popper.min.js"></script>
+  <!--=== Bootstrap Min Js ===-->
+  <script src="assets/js/vendor/bootstrap.min.js"></script>
+  <!--=== Ajax Mail Js ===-->
+  <script src="assets/js/ajax-mail.js"></script>
+  <!--=== Plugins Min Js ===-->
+  <script src="assets/js/plugins.js"></script>
+  
+  <!--=== Active Js ===-->
+  <script src="assets/js/active.js"></script>
+  
+  <!--=== Function Js ===-->
+  <script src="../js/sign-in.js"></script>
+  <script src="../js/sign-up.js"></script>
+  <script src="../js/info.js"></script>
