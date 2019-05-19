@@ -52,7 +52,7 @@
                                         <span class="contact-icon">
                                             <i class="fa fa-envelope"></i>
                                         </span>
-                                        <a href="mailto:your@example.com" class="contact-text">
+                                        <a href="#" class="contact-text">
                                             <strong>Email:</strong> 123456789@qq.com
                                         </a>
                                     </div>
@@ -60,7 +60,7 @@
                                         <span class="contact-icon">
                                             <i class="fa fa-phone"></i>
                                         </span>
-                                        <a href="" class="contact-text">
+                                        <a href="#" class="contact-text">
                                             <strong>Phone:</strong> (+86) 123-456-789
                                         </a>
                                     </div>
@@ -108,14 +108,15 @@
                         <div class="row">
                             <!-- Logo Area Start -->
                             <div class="col-4 col-md-2 col-xl-3 m-auto text-center text-lg-left">
-                                <a href="index.html" class="logo-wrap d-block">
+                                <a href="{% url 'home' %}" class="logo-wrap d-block">
                                     <img src="{% static 'img/logo.png' %}" alt="Logo" class="img-fluid"/>
                                 </a>
                             </div>
                             <!-- Logo Area End -->
             
                             <!-- Search Box Area Start -->
-                            <div class="col-8 col-md-7 col- m-auto ">
+                            <!-- search has bug -->
+                            <div class="col-8 col-md-7 col- m-auto "> 
                                 <div class="search-box-wrap">
                                     <form class="search-form d-flex" action="#" method="get">
                                         <input type="search" name="search" placeholder="搜索..."/>
@@ -126,7 +127,7 @@
                                 </div>
                             </div>
                             <!-- Search Box Area End -->
-            
+                            <!--bug change project-->
                             <!-- Mini Cart Area Start -->
                             <div class="col-12 col-md-3 col-xl-2 m-auto text-center text-lg-right mt-xs-15">
                                 <div class="minicart-wrapper">
@@ -148,14 +149,15 @@
                                 <div class="main-menu-wrap">
                                     <nav class="mainmenu">
                                         <ul class="main-navbar clearfix">
-                                            <li class="dropdown-show"><a href="main.html" class="arrow-toggle">主界面</a>
+                                            <li class="dropdown-show"><a href="{% url 'home' %}" class="arrow-toggle">主界面</a>
                                                 <ul class="dropdown-nav sub-dropdown">
-                                                    <li><a href="idea.html">创意区</a></li>
-                                                    <li><a href="lab.html">实验室项目区</a></li>
+                                                    <li><a href="{% url 'board_topics' 1 %}">个人创意</a></li>
+                                                    <li><a href="{% url 'board_topics' 2 %}">委托专区</a></li>
+                                                    <li><a href="{% url 'board_topics' 3 %}">实验室项目</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="info.html">个人信息</a></li>
-                                            <li><a href="about-us.html">关于我们</a></li>
+                                            <li><a href="{% url 'my_account' %}">个人信息</a></li>
+                                            {% comment %} <li><a href="about-us.html">关于我们</a></li> {% endcomment %}
                                         </ul>
                                     </nav>
                                 </div>
@@ -169,7 +171,7 @@
             <!--== End Header Section ==-->
             
             <!--== Start Page Breadcrumb ==-->
-            <div class="page-breadcrumb-wrap">
+            {% comment %} <div class="page-breadcrumb-wrap">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -183,7 +185,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
             <!--== End Page Breadcrumb ==-->
             <div class="container">
                 <ol class="breadcrumb my-4">
