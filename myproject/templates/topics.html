@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% load humanize %}
-
+{% load static %}
 {% block title %}
   {{ board.name }} - {{ block.super }}
 {% endblock %}
@@ -36,21 +36,22 @@
           <td style="width: 200px;">		
           <div>			
                 <div class="single-product-item">
-                    <figure class="product-thumb">
-                        <a href="{{ topic_url }}"><img src="https://img2018.cnblogs.com/blog/1628230/201905/1628230-20190506133502179-964943521.jpg"
-                                  alt="Product"></a>
-                        <a href="idea-detail.html" class="btn btn-round btn-cart" title="Quick View"><i
-                                                class="fa fa-eye"></i></a>
-                    </figure>
                     <div class="product-details">
-                        <h2 class="product-title"><a href="single-product.html">{{ topic.board.name }}
+                        <h2 class="product-title"><a href="{{ topic_url }}">{{ topic.subject }}
                                                 </a></h2>
                         <p class="pro-desc"><br /></p>
                     </div>
+                    <figure class="product-thumb">
+                        <a href="{{ topic_url }}"><img src={% static "assets/img/about.jpg" %}
+                                  alt="Product"></a>
+                        <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View"><i
+                                                class="fa fa-eye"></i></a>
+                    </figure>
+
                 </div>
              </div>                  	
 
-            <p class="mb-0">
+            {% comment %} <p class="mb-0">
               <a href="{{ topic_url }}">{{ topic.subject }}</a>
             </p>
             <small class="text-muted">
@@ -61,9 +62,9 @@
               {% if topic.has_many_pages %}
               ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
               {% endif %}
-            </small>
+            </small> {% endcomment %}
           </td>
-          <td class="align-middle">{{ topic.board.description }}</td>
+          <td class="align-middle">{{ topic.posts.first }}</td>
           <td class="align-middle">{{ topic.starter.username }}</td>
           <td class="align-middle">{{ topic.replies }}</td>
           <td class="align-middle">{{ topic.views }}</td>

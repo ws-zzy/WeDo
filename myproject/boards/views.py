@@ -58,11 +58,14 @@ class PostListView(ListView):
 def new_topic(request, pk):
     board = get_object_or_404(Board, pk=pk)
     if request.method == 'POST':
-        form = NewTopicForm(request.POST)
+        form = NewTopicForm(request.POST, request.FILES)
         if form.is_valid():
             topic = form.save(commit=False)
             topic.board = board
             topic.starter = request.user
+            topic.photo = request.FILES['photo']
+            
+            # files file_field=request.FILES['file']
             topic.save()
             Post.objects.create(
                 message=form.cleaned_data.get('message'),

@@ -1,5 +1,5 @@
 import math
-
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.html import mark_safe
@@ -8,6 +8,7 @@ from django.utils.text import Truncator
 from markdown import markdown
 
 
+fs = FileSystemStorage(location='media/photos')
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
@@ -28,7 +29,7 @@ class Topic(models.Model):
     board = models.ForeignKey(Board, related_name='topics')
     starter = models.ForeignKey(User, related_name='topics')
     views = models.PositiveIntegerField(default=0)
-
+    photo = models.ImageField(null=True)
     def __str__(self):
         return self.subject
 
@@ -62,7 +63,7 @@ class Post(models.Model):
 
     def __str__(self):
         truncated_message = Truncator(self.message)
-        return truncated_message.chars(30)
+        return truncated_message.chars(50)
 
     def get_message_as_markdown(self):
         return mark_safe(markdown(self.message, safe_mode='escape'))

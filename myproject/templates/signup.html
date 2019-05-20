@@ -46,15 +46,17 @@
                                         </div>
                                         <div class="custom-control custom-checkbox mt-4">
                                             <input type="checkbox" class="custom-control-input" id="I-agree">
-                                            <label class="custom-control-label" for="I-agree" onClick="read_con()">我同意服务协议</label>
+                                            <label class="custom-control-label" for="I-agree" onClick="read_con()">我同意服务协议
+
+                                            </label>
+                                            <a title="Quick View" class="btn btn-round btn-cart" href="#" data-toggle="modal" data-target="#quickView"><i class="fa fa-eye"></i></a>
+                                            
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-2">
-                                <a title="Quick View" class="btn btn-round btn-cart" href="#" data-toggle="modal" data-target="#quickView"><i class="fa fa-eye"></i></a>
-                            </div>
+
                             
                             
                             <!--<div>
@@ -83,7 +85,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><img src="assets/img/icons/cancel.png" alt="Close" class="img-fluid" /></span>
+                <span aria-hidden="true"><img src={% static "assets/img/icons/cancel.png" %} alt="Close" class="img-fluid" /></span>
             </button>
             <div class="modal-body">
                 <div class="quick-view-content single-product-page-content">

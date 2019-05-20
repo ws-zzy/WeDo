@@ -14,7 +14,7 @@
         <div class="card m-t-40">
           <img class="card-img-top w-100per" src={% static "assets/img/usr.png"%} alt="头像">
           <div class="card-body">
-            <h4 class="card-title">昵称</h4>
+            <h4 class="card-title">{{ user.username }}</h4>
             <button type="button" class="btn btn-primary" id="nick-rev" data-toggle="modal" data-target="#nick-mod" >修改昵称</button>
           </div>
         </div>
@@ -27,7 +27,7 @@
                 <div class="col-8">
                   <form class="form-inline">
                     <label>邮箱:</label>
-                    <label id="mail-info">123@qq.com</label>
+                    <label id="mail-info">{{ user.email }}</label>
                   </form>
                 </div>
                 <div class="col-4">
@@ -40,7 +40,7 @@
                 <div class="col-8">
                   <form class="form-inline">
                     <label>用户名:</label>
-                    <label id="usr-info">dalige</label>
+                    <label id="usr-info">{{ user.username }}</label>
                   </form>
                 </div>
                 <div class="col-4">
@@ -48,7 +48,7 @@
                 </div>
               </div>
             </li>
-            <li class="list-group-item list-group-item-danger">
+            {% comment %} <li class="list-group-item list-group-item-danger">
               <div class="row l-h-40">
                 <div class="col-8">
                   <form class="form-inline">
@@ -73,7 +73,7 @@
                   <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>
                 </div>
               </div>
-            </li>
+            </li> {% endcomment %}
           </ul>
         </div>
       </div>
