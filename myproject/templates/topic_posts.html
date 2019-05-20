@@ -45,10 +45,10 @@
                             <p id="brief" class="products-desc">{{ posts.first.get_message_as_markdown }}</p>
     
                             <div class="product-quantity d-flex align-items-center">
-                                {% if user.is_authenticated %}
-                                <form>
-                                    <button type="button" class="btn btn-primary mr-3" data-dismiss="modal"><i class="fa fa-heart"></i>收藏</button>
-                                </form>
+                                {% if star %}
+                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>已收藏</a>
+                                {% else %}
+                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>收藏</a>
                                 {% endif %}
                                 <a href="{% url 'reply_topic' topic.board.pk topic.pk %}" class="btn btn-cart-large"><i class="fa fa-comment"></i>评论</a>
                             </div>

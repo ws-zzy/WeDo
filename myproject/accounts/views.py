@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
 from .forms import SignUpForm
-from .models import User
+from .models import User, Favorite
 
 
 def signup(request):
@@ -32,6 +32,11 @@ class UserUpdateView(UpdateView):
     def get_object(self):
         return self.request.user
 
+    # def get_context_data(self, **kwargs):
+    #     kwargs['project'] = self.topic
+    #     kwargs['stars'] = Fa
+    #     return super().get_context_data(**kwargs)
+
     def post(self, request, *args, **kwargs):
         user = self.get_object()
         if 'new-name' in request.POST:
@@ -41,6 +46,5 @@ class UserUpdateView(UpdateView):
             password2 = request.POST.get('password2')
             if password1 == password2:
                 user.set_password(password1)
-        print(request.POST)
         user.save()
         return render(request, 'my_account.html')

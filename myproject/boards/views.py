@@ -9,6 +9,7 @@ from django.urls import reverse
 
 from .forms import NewTopicForm, PostForm
 from .models import Board, Post, Topic
+from accounts.models import Favorite, User
 
 
 class BoardListView(ListView):
@@ -32,9 +33,6 @@ class TopicListView(ListView):
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
         return queryset
 
-    @login_required
-    def post(self, request):
-        return render(request, 'topics.html')
 
 
 class PostListView(ListView):
@@ -50,12 +48,33 @@ class PostListView(ListView):
             self.topic.save()
             self.request.session[session_key] = True
         kwargs['topic'] = self.topic
+        kwargs['star'] = False
+        if self.request.user.is_authenticated():
+            print(self.user)
+            print(type(self.user))
+            print(self.topic)
+            print(type(self.topic))
+            kwargs['star'] = Favorite.is_star(self.user, self.topic)
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
         self.topic = get_object_or_404(Topic, board__pk=self.kwargs.get('pk'), pk=self.kwargs.get('topic_pk'))
+        if self.request.user.is_authenticated():
+            self.user = User.objects.get(pk=self.request.user.pk)
         queryset = self.topic.posts.order_by('created_at')
         return queryset
+
+@login_required
+def favorite(request, pk, topic_pk):
+    topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
+    topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
+    user = get_object_or_404(User, pk=request.user.pk)
+    if Favorite.is_star(user, topic):
+        Favorite.unstar(user, topic)
+    else:
+        Favorite.star(user, topic)
+    return redirect(topic_url)
+
 
 
 @login_required
