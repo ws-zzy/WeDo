@@ -37,32 +37,36 @@
           <div>			
                 <div class="single-product-item">
                     <div class="product-details">
-                        <h2 class="product-title"><a href="{{ topic_url }}">{{ topic.subject }}
-                                                </a></h2>
+                        <h2 class="product-title">
+                          <a href="{{ topic_url }}">{{ topic.subject }}</a>
+                        </h2>
                         <p class="pro-desc"><br /></p>
                     </div>
                     <figure class="product-thumb">
-                        <a href="{{ topic_url }}"><img src={% static "assets/img/about.jpg" %}
-                                  alt="Product"></a>
-                        <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View"><i
-                                                class="fa fa-eye"></i></a>
+                        <a href="{{ topic_url }}">
+                          <img src={% static "assets/img/about.jpg" %} alt="Product">
+                        </a>
+                        <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View">
+                          <i class="fa fa-eye"></i>
+                        </a>
                     </figure>
-
                 </div>
              </div>                  	
 
-            {% comment %} <p class="mb-0">
-              <a href="{{ topic_url }}">{{ topic.subject }}</a>
-            </p>
-            <small class="text-muted">
-              Pages:
-              {% for i in topic.get_page_range %}
-                <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
-              {% endfor %}
-              {% if topic.has_many_pages %}
-              ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
-              {% endif %}
-            </small> {% endcomment %}
+            {% comment %} 
+              <p class="mb-0">
+                <a href="{{ topic_url }}">{{ topic.subject }}</a>
+              </p>
+              <small class="text-muted">
+                Pages:
+                {% for i in topic.get_page_range %}
+                  <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
+                {% endfor %}
+                {% if topic.has_many_pages %}
+                ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+                {% endif %}
+              </small> 
+            {% endcomment %}
           </td>
           <td class="align-middle">{{ topic.posts.first }}</td>
           <td class="align-middle">{{ topic.starter.username }}</td>

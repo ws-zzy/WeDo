@@ -6,23 +6,12 @@
 
 {% block title %}{{ topic.subject }}{% endblock %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
+    <li class="breadcrumb-item active">注册</li>
+{% endblock %}
+
 {% block content %}
-<!--== Start Page Breadcrumb ==-->
-<div class="page-breadcrumb-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-breadcrumb">
-                    <ul class="nav">
-                        <li><a href="new-main.html">主界面</a></li>
-                        <li><a href="new-sign-in.html" class="active">注册&amp;登录</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--== End Page Breadcrumb ==-->
 <!--== Page Content Wrapper Start ==-->
 <div id="page-content-wrapper">
     <div class="container">

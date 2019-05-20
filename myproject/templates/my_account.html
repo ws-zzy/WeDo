@@ -48,19 +48,6 @@
                 </div>
               </div>
             </li>
-            {% comment %} <li class="list-group-item list-group-item-danger">
-              <div class="row l-h-40">
-                <div class="col-8">
-                  <form class="form-inline">
-                    <label>入坑时间:</label>
-                    <label id="time-info">3小时</label>
-                  </form>
-                </div>
-                <div class="col-4">
-                  <button type="button" class="btn btn-primary disabled" id="time-rev">修改</button>
-                </div>
-              </div>
-            </li>
             <li class="list-group-item list-group-item-warning">
               <div class="row l-h-40"><!--不设置line-height会导致字不在列表行的垂直中间位置-->
                 <div class="col-8"><!--通过行布局来让不同组件位于同一行-->
@@ -73,7 +60,7 @@
                   <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>
                 </div>
               </div>
-            </li> {% endcomment %}
+            </li>
           </ul>
         </div>
       </div>
@@ -279,20 +266,21 @@
           <h3 class="modal-title">修改昵称</h3>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <form name="nickname-form">
+        <form name="nickname-form" method="post">
+          {% csrf_token %}
           <div class="modal-body">
             <div class="input-group input-group-lg">
               <div class="input-group-prepend">
                 <span class="input-group-text w-100">昵称</span>
               </div>
-              <input type="text" class="form-control" placeholder="请输入新昵称" id="nickname-input" name="nickname-input" required autofocus>
-            </div>  
+              <input type="text" class="form-control" placeholder="请输入新昵称" id="nickname-input" name="new-name" required autofocus>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+              <button type="submit" class="btn btn-primary" id="nickname-ok">确定</button>
           </div>
         </form>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
-            <button type="button" class="btn btn-primary" id="nickname-ok">确定</button>
-        </div>
       </div>
     </div>
   </div>
@@ -304,26 +292,27 @@
           <h3 class="modal-title">修改密码</h3>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <form name="password-form">
+        <form name="password-form" method="post">
+          {% csrf_token %}
           <div class="modal-body">
             <div class="input-group input-group-lg mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text w-100">密码</span>
               </div>
-              <input type="password" class="form-control" placeholder="请输入新密码" id="password-input" name="password-input" required autofocus>
+              <input type="password" class="form-control" placeholder="请输入新密码" id="password-input" name="password1" required autofocus>
             </div>
             <div class="input-group input-group-lg mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text w-100">确认密码</span>
               </div>
-              <input type="password" class="form-control" placeholder="请再次输入新密码" id="password-con-input" name="password-con-input" required>
+              <input type="password" class="form-control" placeholder="请再次输入新密码" id="password-con-input" name="password2" required>
             </div>
           </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+              <button type="submit" class="btn btn-primary" id = "password-ok">确定</button>
+          </div>
         </form>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
-            <button type="button" class="btn btn-primary" id = "password-ok">确定</button>
-        </div>
       </div>
     </div>
   </div>
