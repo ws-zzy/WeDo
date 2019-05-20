@@ -32,6 +32,10 @@ class TopicListView(ListView):
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
         return queryset
 
+    @login_required
+    def post(self, request):
+        return render(request, 'topics.html')
+
 
 class PostListView(ListView):
     model = Post

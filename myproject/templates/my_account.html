@@ -289,43 +289,7 @@
     </div>
   </div>
 {% endblock %}
-
-<script>
-    function check_password_form()
-    {
-      var p = /^[0-9a-zA-Z]+$/; 
-      /*var tmp = document.getElementById("password-input").value;
-      var tmp_con = document.getElementById("password-con-input").value;*/
-      var pwd = $("#password-input").val();
-      if(!p.test(pwd)){
-        alert("密码只能包含数字和字母")
-        return false;
-      }
-      if(pwd.length < 8 || pwd.length > 16){
-        alert("密码长度必须在8至16位之间");
-        return false;
-      }
-      var pwd_con = $("#password-con-input").val();
-      if(pwd != pwd_con){
-        alert("两次输入密码不一致");
-        return false;
-      }
-      return true;
-    }
   
-  
-  
-    function check_mail_form(){
-  
-    }
-  </script>
-  
-  <script>
-      function aaa(){
-          document.getElementById("top-nickname").innerHTML = '<a href="info.html">欢迎！昵称</a>'
-          document.getElementById("top-image").innerHTML = '<img src={% static "assets/img/usr.png"%} alt="头像" class="ml-3 rounded-circle w-30">'
-      }
-  </script>
   <!--=== Jquery Min Js ===-->
   <script src={% static "assets/js/vendor/jquery-3.3.1.min.js"%}></script>
   <!--=== Jquery Migrate Min Js ===-->
