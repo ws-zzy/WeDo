@@ -20,6 +20,17 @@
             <div class="single-product-page-content">
                 <div class="row">
                     <!-- Product Thumbnail Start -->
+                    {% if topic.photo %}
+                        <div class="col-lg-5 order-last">
+                            <div class="product-thumbnail-wrap">
+                                <div class="product-thumb-gallery sticky-view">
+                                    <a href="{{ topic.photo.url }}" class="single-gallery-item">
+                                        <img src="{{ topic.photo.url }}" alt="创意图片"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                     <!-- Product Thumbnail End -->
     
                     <!-- Product Details Start -->
@@ -31,7 +42,7 @@
                                 <img src="{% static 'img/usr.png' %}" alt="头像" class="ml-3 rounded-circle w-30">
                             </div>
     
-                            <p id="brief" class="products-desc">{{ posts.first.message }}</p>
+                            <p id="brief" class="products-desc">{{ posts.first.get_message_as_markdown }}</p>
     
                             <div class="product-quantity d-flex align-items-center">
                                 <a href="cart.html" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>收藏</a>
@@ -86,7 +97,7 @@
                                                             {% endif %}
                                                         {% endfor %}
                                                     </div>
-                                                    <div id="write-comment" class="leave-comment-area comment-single-item">
+                                                    {% comment %} <div id="write-comment" class="leave-comment-area comment-single-item">
                                                         <h2>发表评论</h2>
                                                         <div class="comment-form-wrap">
                                                             <form action="#" method="get">
@@ -98,7 +109,7 @@
                                                                 <button type="submit" class="btn">提交</button>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> {% endcomment %}
                                                 </div>
                                             </div>
                                         </div>

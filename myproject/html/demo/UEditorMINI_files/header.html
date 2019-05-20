@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://ueditor.baidu.com/website/header.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta name="keywords" content="UEditor,Editor,editor,javascript 编辑器,百度编辑器,百度 Editor,html 编辑器,富文本编辑器,在线编辑器">
+    <meta name="description" content="UEditor 是一套开源的在线HTML编辑器，主要用于让用户在网站上获得所见即所得编辑效果，开发人员可以用 UEditor 把传统的多行文本输入框(textarea)替换为可视化的富文本输入框。UEditor 使用 JavaScript 编写，可以无缝地与 Java、.NET、PHP、ASP 等程序集成，比较适合在 CMS、商城、论坛、博客、Wiki、电子邮件等互联网应用上使用。">
+    <link rel="stylesheet" type="text/css" href="./public.css">
+</head>
+<body style="">
+<div id="header" class="canvassing-abs">
+    <div class="header-cont w900 clearfix">
+        <h1 class="header-logo">
+            <a target="_top" href="https://ueditor.baidu.com/website/index.html">百度Ueditor官网</a>
+        </h1>
+        <ul id="J_navList" class="header-nav">
+            <li><a href="https://ueditor.baidu.com/website/index.html" target="_top">首页</a></li>
+            <li><a href="https://ueditor.baidu.com/website/download.html" target="_top">下载</a></li>
+            <li class="new-up"><a href="https://ueditor.baidu.com/website/onlinedemo.html" target="_top">UE演示<sup></sup></a></li>
+            <li><a href="https://ueditor.baidu.com/website/umeditor.html" target="_top">UM演示</a></li>
+            <li class="new-up"><a href="https://ueditor.baidu.com/website/thirdproject.html" target="_top">插件<sup></sup></a></li>
+            <li><a href="http://fex.baidu.com/ueditor" target="_blank">文档</a></li>
+            <li><a href="https://ueditor.baidu.com/doc" target="_blank">API</a></li>
+            <li><a href="https://github.com/fex-team/ueditor/issues" target="_blank">论坛</a></li>
+            <li><a href="http://naotu.baidu.com/" target="_blank">百度脑图</a></li>
+            <li><a href="http://h5.baidu.com/" target="_blank">百度 H5</a></li>
+        </ul>
+    </div>
+</div>
+<script src="./jquery-1.10.1.min.js.下载"></script>
+<script src="./util.js.下载" type="text/javascript"></script>
+
+<script type="text/javascript">
+    (function () {
+        var pageName = {
+                    'index.html':0,
+                    'download.html':1,
+                    'onlinedemo.html':2,
+                    'um.html':3,
+                    'thirdproject.html':4,
+                    'changelog.html':5,
+                    'helper.html':6,
+                    'document.html':-1
+                },
+                path = parent.location.pathname,
+                arr = path.split("/"),
+                name = arr[arr.length - 1],
+                navList = util.$G("J_navList");
+        for (var property in pageName) {
+            if (property == name) {
+                navList.children[pageName[property]].className += " cur";
+            }
+        }
+    })();
+</script>
+
+</body></html>
