@@ -45,8 +45,10 @@
                             <p id="brief" class="products-desc">{{ posts.first.get_message_as_markdown }}</p>
     
                             <div class="product-quantity d-flex align-items-center">
-                                <a href="cart.html" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>收藏</a>
-                                <a href="#write-comment" class="btn btn-cart-large"><i class="fa fa-comment"></i>评论</a>
+                                {% if user.is_authenticated %}
+                                    <a href="cart.html" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>收藏</a>
+                                {% endif %}
+                                <a href="{% url 'reply_topic' topic.board.pk topic.pk %}" class="btn btn-cart-large"><i class="fa fa-comment"></i>评论</a>
                             </div>
                         </div>
                     </div>
