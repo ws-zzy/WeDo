@@ -59,7 +59,7 @@
                                                 <!-- Comment Area Start -->
                                                 <div class="comment-area-wrapper">
                                                     <div class="comments-preview-area comment-single-item">
-                                                        <h2>评论({{posts.count - 1}})</h2>
+                                                        <h2>评论({{posts.count|add:-1}})</h2>
                                                         {% for post in posts%}
                                                             {% if not forloop.first %}
 
