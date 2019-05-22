@@ -15,7 +15,6 @@
           <img class="card-img-top w-100per" src={% static "assets/img/usr.png"%} alt="头像">
           <div class="card-body">
             <h4 class="card-title">{{ user.username }}</h4>
-            <button type="button" class="btn btn-primary" id="nick-rev" data-toggle="modal" data-target="#nick-mod" >修改昵称</button>
           </div>
         </div>
 
@@ -29,6 +28,9 @@
                     <label>邮箱:</label>
                     <label id="mail-info">{{ user.email }}</label>
                   </form>
+                </div>
+                <div class="col-4">
+                  <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>
                 </div>
               </div>
             </li>
@@ -76,15 +78,22 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="tab" href="#my-release">我发布的项目</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#my-join">我参与的项目</a>
-            </li>
           </ul>
           <!-- Tab panes -->
           <div id="info-tab-content" class="tab-content"><!--可以设计scroll安装的位置-->
             <div id="my-collection" class="container tab-pane active"><br>
               <div id="my-collection-show">
+                {% for star in stars %}
+                  <div class="media border p-3 mb-5 h-100">
+                    <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                    <div class="media-body">
+                      <h3>{{ star.subject}}</h3>
+                      <p>{{ star.posts.first }}</p>    
+                    </div>
+                  </div>
+                {% endfor %}
               </div>
+              {% comment %}
               <div class="products-settings-option d-block d-md-flex mb-3">
                 <nav class="page-pagination">
                   <ul id="my-collection-pages" class="pagination">
@@ -96,37 +105,20 @@
                   </ul>
                 </nav>
               </div>
+              {% endcomment %}
             </div>
 
             <div id="my-follow" class="container tab-pane fade"><br>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>昵称一</h3>
-                  <p>邮箱一<p>    
+              {% comment %}
+              {% for project in projects.all %}
+                <div class="media border p-3 mb-5 h-100">
+                  <img src={% static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                  <div class="media-body">
+                    <h3>昵称一</h3>
+                    <p>邮箱一<p>    
+                  </div>
                 </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>昵称二</h3>
-                  <p>邮箱二<p>   
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>昵称三</h3>
-                  <p>邮箱三<p>      
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>昵称四</h3>
-                  <p>邮箱四<p>    
-                </div>
-              </div>
+              {% endfor %}
               <div class="products-settings-option d-block d-md-flex mb-3">
                 <nav class="page-pagination">
                   <ul class="pagination">
@@ -138,37 +130,20 @@
                   </ul>
                 </nav>
               </div>
+              {% endcomment %}
             </div>
 
             <div id="my-release" class="container tab-pane fade"><br>
+              {% for project in projects.all %}
               <div class="media border p-3 mb-5 h-100">
                 <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                 <div class="media-body">
-                  <h3>创意一</h3>
-                  <p>创意内容介绍</p>    
+                  <h3>{{ project.subject}}</h3>
+                  <p>{{ project.posts.first }}</p>    
                 </div>
               </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意二</h3>
-                  <p>创意内容介绍</p>  
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意三</h3>
-                  <p>创意内容介绍</p>     
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意四</h3>
-                  <p>创意内容介绍</p>   
-                </div>
-              </div>
+              {% endfor %}
+              {% comment %}
               <div class="products-settings-option d-block d-md-flex mb-3">
                 <nav class="page-pagination">
                   <ul id="my-release-pages" class="pagination">
@@ -180,49 +155,9 @@
                   </ul>
                 </nav>
               </div>
+              {% endcomment %}
             </div>
 
-            <div id="my-join" class="container tab-pane fade"><br>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意一</h3>
-                  <p>创意内容介绍</p>    
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意二</h3>
-                  <p>创意内容介绍</p>  
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意三</h3>
-                  <p>创意内容介绍</p>     
-                </div>
-              </div>
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>创意四</h3>
-                  <p>创意内容介绍</p>   
-                </div>
-              </div>
-              <div class="products-settings-option d-block d-md-flex mb-3">
-                <nav class="page-pagination">
-                  <ul class="pagination">
-                    <li><a href="#" aria-label="Previous">&laquo;</a></li>
-                    <li><a class="current" href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#" aria-label="Next">&raquo;</a></li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
 
           </div><!--tab-content-->
         </div><!--card-->
@@ -230,22 +165,21 @@
 
     </div>
   </div>
-  
-  <div class="modal fade" id="nick-mod">
+  <div class="modal fade" id="mail-mod">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 class="modal-title">修改昵称</h3>
+          <h3 class="modal-title">修改邮箱</h3>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <form name="nickname-form" method="post">
+        <form>
           {% csrf_token %}
           <div class="modal-body">
             <div class="input-group input-group-lg">
               <div class="input-group-prepend">
-                <span class="input-group-text w-100">昵称</span>
+                <span class="input-group-text w-100">邮箱</span>
               </div>
-              <input type="text" class="form-control" placeholder="请输入新昵称" id="nickname-input" name="new-name" required autofocus>
+              <input type="email" class="form-control" placeholder="请输入新邮箱" id="mail-input" name="new-email" required autofocus>
             </div>
           </div>
           <div class="modal-footer">

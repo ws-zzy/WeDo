@@ -51,10 +51,10 @@ class PostListView(ListView):
         kwargs['topic'] = self.topic
         kwargs['star'] = False
         if self.request.user.is_authenticated():
-            print(self.user)
-            print(type(self.user))
-            print(self.topic)
-            print(type(self.topic))
+            # print(self.user)
+            # print(type(self.user))
+            # print(self.topic)
+            # print(type(self.topic))
             kwargs['star'] = Favorite.is_star(self.user, self.topic)
         return super().get_context_data(**kwargs)
 
