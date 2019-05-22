@@ -8,7 +8,6 @@ from django.utils.text import Truncator
 from markdown import markdown
 
 
-fs = FileSystemStorage(location='media/photos')
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)

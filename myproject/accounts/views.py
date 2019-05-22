@@ -1,20 +1,24 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.models import User
-# from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth.backends import ModelBackend
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
 from .forms import SignUpForm
-from .models import User, Favorite
+from .models import Favorite
 
 
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
+            # print(form.cleaned_data)
             user = form.save()
+            # username = form.cleaned_data['username']
+            # user.save()
             login(request, user)
             return redirect('home')
     else:
