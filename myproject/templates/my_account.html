@@ -104,7 +104,7 @@
                     <div id="my-follow" class="container tab-pane fade"><br>
                         {% for follow in follows %}
                             <div class="media border p-3 mb-5 h-100">
-                                <img src={% static "assets/img/user.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                                <img src={% static "img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
                                 <div class="media-body">
                                     <a href="{% url 'user_account' follow.pk %}">
                                         <h3>{{ follow.username }}</h3>
