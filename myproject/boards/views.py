@@ -50,6 +50,10 @@ class PostListView(ListView):
             self.request.session[session_key] = True
         kwargs['topic'] = self.topic
         kwargs['star'] = False
+        if self.topic.starter.pk == self.user.pk:   #<-- from here
+            kwargs['return_url'] = reverse('my_account')
+        else:
+            kwargs['return_url'] = reverse('user_account', kwargs={'user_pk': self.topic.starter.pk})   #<--to here
         if self.request.user.is_authenticated():
             # print(self.user)
             # print(type(self.user))

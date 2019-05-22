@@ -34,6 +34,13 @@ class Follow(models.Model):
             user_followed.append(followeder.followed)
         return user_followed #得到from_user关注的人，返回列表
 
+    @staticmethod
+    def is_followed(from_user, to_user):
+        f = Follow.objects.filter(follower=from_user, followed=to_user).all()
+        if f:
+            return True
+        return False
+
 class Favorite(models.Model):
     user = models.ForeignKey(User, related_name='faverer', on_delete=models.CASCADE)
     project = models.ForeignKey(Topic, related_name='favered', on_delete=models.CASCADE)

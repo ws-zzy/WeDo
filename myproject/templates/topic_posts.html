@@ -38,7 +38,7 @@
                         <div class="product-details sidebar-active">
                             <h2><a href="#brief">{{ topic.subject }}</a></h2>
                             <div class="product-info-stock-sku">
-                                <a href="info.html" class="product-stock-status text-success">{{ posts.first.created_by.username }}</a>
+                                <a href="{{ return_url }}" class="product-stock-status text-success">{{ posts.first.created_by.username }}</a>
                                 <img src="{% static 'img/usr.png' %}" alt="头像" class="ml-3 rounded-circle w-30">
                             </div>
     

@@ -11,160 +11,127 @@
 <div class="container">
     <div class="row h-800">
 	    <div class="col-md-4 text-center">
-        <div class="card m-t-40">
-          <img class="card-img-top w-100per" src={% static "assets/img/usr.png"%} alt="头像">
-          <div class="card-body">
-            <h4 class="card-title">{{ user.username }}</h4>
-          </div>
+            <div class="card m-t-40">
+                <img class="card-img-top w-100per" src={% static "assets/img/usr.png"%} alt="头像">
+                <div class="card-body">
+                    <h4 class="card-title">{{ user.username }}</h4>
+                    {% if is_self == False %}
+                        <a href="{% url 'follow' user.pk %}" class="btn btn-primary" id="follow_button">{% if is_followed %}取消关注{% else %}关注{% endif %}</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card m-t-20">
+                <ul class="list-group">
+
+                    <li class="list-group-item list-group-item-success">
+                        <div class="row l-h-40">
+                            <div class="col-8">
+                                <form class="form-inline">
+                                    <label>邮箱:</label>
+                                    <label id="mail-info">{{ user.email }}</label>
+                                </form>
+                            </div>
+                            {% if is_self %}
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-primary">
+                        <div class="row l-h-40">
+                            <div class="col-8">
+                                <form class="form-inline">
+                                    <label>用户名:</label>
+                                    <label id="usr-info">{{ user.username }}</label>
+                                </form>
+                            </div>
+                            <!--div class="col-4">
+                                <button type="button" class="btn btn-primary disabled" id="usr-rev">修改</button>
+                            </div-->
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-warning">
+                        <div class="row l-h-40"><!--不设置line-height会导致字不在列表行的垂直中间位置-->
+                            <div class="col-8"><!--通过行布局来让不同组件位于同一行-->
+                                <form class="form-inline"><!--通过使用form的form-inline来让不同的组件位于同一行-->
+                                    <label>注册时长:</label>
+                                    <label id="pwd-info">********</label>
+                                </form>
+                            </div>
+                            {% if is_self %}
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
 
-        <div class="card m-t-20">
-          <ul class="list-group">
-
-            <li class="list-group-item list-group-item-success">
-              <div class="row l-h-40">
-                <div class="col-8">
-                  <form class="form-inline">
-                    <label>邮箱:</label>
-                    <label id="mail-info">{{ user.email }}</label>
-                  </form>
-                </div>
-                <div class="col-4">
-                  <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>
-                </div>
-              </div>
-            </li>
-            <li class="list-group-item list-group-item-primary">
-              <div class="row l-h-40">
-                <div class="col-8">
-                  <form class="form-inline">
-                    <label>用户名:</label>
-                    <label id="usr-info">{{ user.username }}</label>
-                  </form>
-                </div>
-                <div class="col-4">
-                  <button type="button" class="btn btn-primary disabled" id="usr-rev">修改</button>
-                </div>
-              </div>
-            </li>
-            <li class="list-group-item list-group-item-warning">
-              <div class="row l-h-40"><!--不设置line-height会导致字不在列表行的垂直中间位置-->
-                <div class="col-8"><!--通过行布局来让不同组件位于同一行-->
-                  <form class="form-inline"><!--通过使用form的form-inline来让不同的组件位于同一行-->
-                    <label>密码:</label>
-                    <label id="pwd-info">********</label>
-                  </form>
-                </div>
-                <div class="col-4">
-                  <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      
-      <div class="col-md-8 text-center">
-        <div id="info-tab-card" class="card">
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#my-collection">收藏</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#my-follow">关注</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#my-release">我发布的项目</a>
-            </li>
-          </ul>
-          <!-- Tab panes -->
-          <div id="info-tab-content" class="tab-content"><!--可以设计scroll安装的位置-->
-            <div id="my-collection" class="container tab-pane active"><br>
-              <div id="my-collection-show">
-                {% for star in stars %}
-                  <div class="media border p-3 mb-5 h-100">
-                    <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                    <div class="media-body">
-                      <h3>{{ star.subject}}</h3>
-                      <p>{{ star.posts.first }}</p>    
+        <div class="col-md-8 text-center">
+            <div id="info-tab-card" class="card">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#my-collection">收藏</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#my-follow">关注</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#my-release">我发布的项目</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div id="info-tab-content" class="tab-content"><!--可以设计scroll安装的位置-->
+                    <!--收藏-->
+                    <div id="my-collection" class="container tab-pane active"><br>
+                    <!--div id="my-collection-show"-->
+                        {% for star in stars %}
+                            <div class="media border p-3 mb-5 h-100">
+                                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                                <div class="media-body">
+                                    <h3>{{ star.subject}}</h3>
+                                    <p>{{ star.posts.first }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                  </div>
-                {% endfor %}
-              </div>
-              {% comment %}
-              <div class="products-settings-option d-block d-md-flex mb-3">
-                <nav class="page-pagination">
-                  <ul id="my-collection-pages" class="pagination">
-                    <!--li><a href="#" aria-label="Previous">&laquo;</a></li>
-                    <li><a class="current" href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#" aria-label="Next">&raquo;</a></li-->
-                  </ul>
-                </nav>
-              </div>
-              {% endcomment %}
-            </div>
-
-            <div id="my-follow" class="container tab-pane fade"><br>
-              {% comment %}
-              {% for project in projects.all %}
-                <div class="media border p-3 mb-5 h-100">
-                  <img src={% static "assets/img/usr.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
-                  <div class="media-body">
-                    <h3>昵称一</h3>
-                    <p>邮箱一<p>    
-                  </div>
-                </div>
-              {% endfor %}
-              <div class="products-settings-option d-block d-md-flex mb-3">
-                <nav class="page-pagination">
-                  <ul class="pagination">
-                    <li><a href="#" aria-label="Previous">&laquo;</a></li>
-                    <li><a class="current" href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#" aria-label="Next">&raquo;</a></li>
-                  </ul>
-                </nav>
-              </div>
-              {% endcomment %}
-            </div>
-
-            <div id="my-release" class="container tab-pane fade"><br>
-              {% for project in projects.all %}
-              <div class="media border p-3 mb-5 h-100">
-                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
-                <div class="media-body">
-                  <h3>{{ project.subject}}</h3>
-                  <p>{{ project.posts.first }}</p>    
-                </div>
-              </div>
-              {% endfor %}
-              {% comment %}
-              <div class="products-settings-option d-block d-md-flex mb-3">
-                <nav class="page-pagination">
-                  <ul id="my-release-pages" class="pagination">
-                    <li><a href="#" aria-label="Previous">&laquo;</a></li>
-                    <li><a class="current" href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#" aria-label="Next">&raquo;</a></li>
-                  </ul>
-                </nav>
-              </div>
-              {% endcomment %}
-            </div>
-
-
-          </div><!--tab-content-->
-        </div><!--card-->
-      </div><!--col-8-->
-
+                    <!--关注-->
+                    <div id="my-follow" class="container tab-pane fade"><br>
+                        {% for follow in follows %}
+                            <div class="media border p-3 mb-5 h-100">
+                                <img src={% static "assets/img/user.png"%} alt="头像" class="mr-3 mt-3 rounded-circle big-icon">
+                                <div class="media-body">
+                                    <a href="{% url 'user_account' follow.pk %}">
+                                        <h3>{{ follow.username }}</h3>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!--发起的项目-->
+                    <div id="my-release" class="container tab-pane fade"><br>
+                        {% for project in projects.all %}
+                            <div class="media border p-3 mb-5 h-100">
+                                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                                <div class="media-body">
+                                    <h3>{{ project.subject}}</h3>
+                                    <p>{{ project.posts.first }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div><!--tab-content-->
+            </div><!--card-->
+        </div><!--col-8-->
     </div>
-  </div>
+</div>
+
+<!--模态框-->
   <div class="modal fade" id="mail-mod">
     <div class="modal-dialog">
       <div class="modal-content">
