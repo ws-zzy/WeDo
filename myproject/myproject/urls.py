@@ -31,7 +31,7 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
         name='password_reset_complete'),
 
-    url(r'^settings/account/$', accounts_views.UserUpdateView.as_view(), name='my_account'),
+    url(r'^settings/account/$', accounts_views.my_account, name='my_account'),
     url(r'^settings/account/(?P<user_pk>\d+)/$', accounts_views.UserListView.as_view(), name='user_account'),
     url(r'^settings/account/(?P<user_pk>\d+)/follow/$', accounts_views.follow, name='follow'),
     url(r'^settings/password/$', auth_views.PasswordChangeView.as_view(template_name='password_change.html'),

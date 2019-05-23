@@ -9,7 +9,7 @@ from markdown import markdown
 
 
 class Board(models.Model):
-    name = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=15, unique=True)
     description = models.CharField(max_length=100)
 
     def __str__(self):
@@ -23,7 +23,7 @@ class Board(models.Model):
 
 
 class Topic(models.Model):
-    subject = models.CharField(max_length=255)
+    subject = models.CharField(max_length=15)
     last_updated = models.DateTimeField(auto_now_add=True)
     board = models.ForeignKey(Board, related_name='topics')
     starter = models.ForeignKey(User, related_name='topics')
