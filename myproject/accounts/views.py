@@ -98,7 +98,8 @@ class UserListView(ListView):
         return super().get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
-        user = self.get_object()
+        user = get_object_or_404(User, pk=self.kwargs.get('user_pk'))
+        print(request.POST)
         if 'new-email' in request.POST:
             user.email = request.POST.get('new-email')
         if 'password1' in request.POST:
