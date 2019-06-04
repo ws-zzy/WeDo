@@ -12,12 +12,42 @@ from .forms import NewTopicForm, PostForm
 from .models import Board, Post, Topic
 from accounts.models import Favorite
 
+from fuzzywuzzy import fuzz, process
 
 class BoardListView(ListView):
     model = Board
     context_object_name = 'boards'
     template_name = 'home.html'
 
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            print(search_content)
+            url = reverse('search', kwargs={'pk':search_content})
+        return redirect(url)
+
+
+def search(request, pk):
+    topic_out = list()
+    topic_set = Topic.objects.all()
+    show_list = list()
+    for topic in topic_set:
+        ratio_subject = fuzz.partial_ratio(pk, topic.subject)
+        ratio_describe = fuzz.partial_ratio(pk, topic.posts.all()[0].message)
+        ratio = ratio_subject + 0.7 * ratio_describe
+        if ratio > 40:
+            topic_out.append((topic, ratio))
+    # bubble bubble
+    for i in range(len(topic_out)-1, 0, -1):
+        for j in range(0, i):
+            if topic_out[j+1][1] > topic_out[j][1]:
+                temp = topic_out[j]
+                topic_out[j] = topic_out[j+1]
+                topic_out[j+1] = temp
+    for topic in topic_out:
+        show_list.append(topic[0])
+    return render(request, 'search.html', {'show_list': show_list})
 
 class TopicListView(ListView):
     model = Topic

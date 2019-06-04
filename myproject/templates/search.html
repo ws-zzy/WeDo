@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load static %}
+{% block title %}搜索结果{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
+  <li class="breadcrumb-item active">搜索结果</li>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-striped mb-4">
+        <thead class="thead-inverse ">
+            <tr>
+                <th>主题</th>
+                <th>创意介绍</th>
+                <th>发起人</th>
+                <th>回复数</th>
+                <th>浏览次数</th>
+                <th>最后更新</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for show in show_list %}
+                {% url 'topic_posts' show.board.pk show.pk as topic_url %}
+                <tr>
+                    <td style="width: 200px;">
+                        <div>
+                            <div class="single-product-item">
+                                <div class="product-details">
+                                    <h2 class="product-title">
+                                        <a href="{{ topic_url }}">{{ show.subject }}</a>
+                                    </h2>
+                                    <p class="pro-desc"><br /></p>
+                                </div>
+                                <figure class="product-thumb">
+                                    <a href="{{ topic_url }}">
+                                        <img src={% static "assets/img/about.jpg" %} alt="Product">
+                                    </a>
+                                    <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </figure>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="align-middle">{{ show.posts.first }}</td>
+                    <td class="align-middle">{{ show.starter.username }}</td>
+                    <td class="align-middle">{{ show.replies }}</td>
+                    <td class="align-middle">{{ show.views }}</td>
+                    <td class="align-middle">{{ show.last_updated|naturaltime }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

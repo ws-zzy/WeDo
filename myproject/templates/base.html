@@ -85,8 +85,10 @@
                                             </ul>
                                         {% else %}
                                             <form class="form-inline ml-auto">
-                                                <li><a href="{% url 'login' %}">登录</a></li>
-                                                <li><a href="{% url 'signup' %}">注册</a></li>
+                                                <ul>
+                                                    <li><a href="{% url 'login' %}">登录</a></li>
+                                                    <li><a href="{% url 'signup' %}">注册</a></li>
+                                                </ul>
                                             </form>
                                         {% endif %}{% endblock %}
                                         <li id="top-nickname"></li>
@@ -116,9 +118,10 @@
                             <!-- search has bug -->
                             <div class="col-8 col-md-7 col- m-auto "> 
                                 <div class="search-box-wrap">
-                                    <form class="search-form d-flex" action="#" method="get">
-                                        <input type="search" name="search" placeholder="搜索..."/>
-                                        <button class="btn btn-search">
+                                    <form class="search-form d-flex" method="post" novalidate>
+                                        {% csrf_token %}
+                                        <input type="search" name="search_input" placeholder="搜索..."/>
+                                        <button class="btn btn-search" type="submit" name="search_submit">
                                             <img src="{% static 'img/icon-search.png' %}" alt="搜索"/>
                                         </button>
                                     </form>
@@ -129,7 +132,7 @@
                             <!-- Mini Cart Area Start -->
                             <div class="col-12 col-md-3 col-xl-2 m-auto text-center text-lg-right mt-xs-15">
                                 <div class="minicart-wrapper">
-                                    <a href="lab-post.html" class="btn btn-minicart">发布实验室项目 <!--<sup class="cart-count">3</sup>--></a>
+                                    <a href="{% url 'new_topic' 1 %}" class="btn btn-minicart">虚假的发布按钮 <!--<sup class="cart-count">3</sup>--></a>
                                 </div>
                             </div>
                             <!-- Mini Cart Area End -->
