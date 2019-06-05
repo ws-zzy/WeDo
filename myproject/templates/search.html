@@ -36,7 +36,8 @@
                                 </div>
                                 <figure class="product-thumb">
                                     <a href="{{ topic_url }}">
-                                        <img src={% static "assets/img/about.jpg" %} alt="Product">
+                                        <img style="max-width: 300px; max-height: 300px; " src={% if show.photo %}{{ show.photo.url }}{% else %}{% static 'img/logo.png' %}{% endif %} alt="创意图片">
+                                        <!-- <img src={% static "assets/img/about.jpg" %} alt="Product"> -->
                                     </a>
                                     <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View">
                                         <i class="fa fa-eye"></i>
