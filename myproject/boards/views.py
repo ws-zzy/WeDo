@@ -20,10 +20,8 @@ class BoardListView(ListView):
     template_name = 'home.html'
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         if 'search_submit' in request.POST:
             search_content = request.POST['search_input']
-            print(search_content)
             url = reverse('search', kwargs={'pk':search_content})
         return redirect(url)
 
@@ -63,6 +61,12 @@ class TopicListView(ListView):
         self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
         return queryset
+        
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+        return redirect(url)
 
 
 
@@ -99,6 +103,12 @@ class PostListView(ListView):
         queryset = self.topic.posts.order_by('created_at')
         return queryset
 
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+        return redirect(url)
+
 @login_required
 def favorite(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
@@ -116,6 +126,11 @@ def favorite(request, pk, topic_pk):
 def new_topic(request, pk):
     board = get_object_or_404(Board, pk=pk)
     if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            return redirect(url)
+        
         form = NewTopicForm(request.POST, request.FILES)
         if form.is_valid():
             topic = form.save(commit=False)
@@ -140,6 +155,11 @@ def new_topic(request, pk):
 def reply_topic(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
     if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            return redirect(url)
+
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -181,3 +201,8 @@ class PostUpdateView(UpdateView):
         post.updated_at = timezone.now()
         post.save()
         return redirect('topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+        return redirect(url)
