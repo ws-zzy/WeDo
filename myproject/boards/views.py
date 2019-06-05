@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.urls import reverse
+from django.contrib import messages
 
 from .forms import NewTopicForm, PostForm
 from .models import Board, Post, Topic
@@ -25,8 +26,8 @@ class BoardListView(ListView):
             search_content = request.POST['search_input']
             print(search_content)
             url = reverse('search', kwargs={'pk':search_content})
-        return redirect(url)
-
+            home_url = reverse('home')
+            return redirect(url)
 
 def search(request, pk):
     topic_out = list()
