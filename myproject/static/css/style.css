@@ -147,7 +147,7 @@ img {
   height: 40px;
   width: 40px; }
   .btn-cart:hover {
-    background-color: #f5740a;
+    background-color: #e5e8ec;
     color: #fff; }
   .btn-cart i.fa {
     margin-right: 0; }
@@ -2907,8 +2907,8 @@ Quick View Modal Style
 
 .single-product-item {
   margin-bottom: 6px; }
-  .single-product-item:hover .product-thumb {
-    border-color: #f5740a; }
+  /*.single-product-item:hover .product-thumb {
+    border-color: #0A79FF; }*/
     .single-product-item:hover .product-thumb a.btn-cart {
       -webkit-transform: translate(-50%, -50%) scale(1);
       -moz-transform: translate(-50%, -50%) scale(1);
@@ -2936,8 +2936,8 @@ Quick View Modal Style
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     filter: alpha(opacity=100); }
   .single-product-item .product-thumb {
-    border: 1px solid #eaeaea;
-    margin-bottom: 11px;
+    /*border: 1px solid #eaeaea;*/
+    margin-bottom: 5px;
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
     -o-transition: all 0.4s ease-out;
@@ -2962,7 +2962,7 @@ Quick View Modal Style
         background-color: #f5740a; }
   .single-product-item .product-details .product-title {
     font-size: 1.4rem;
-    line-height: 1.5;
+    line-height: 3;
     font-weight: 400;
     margin-bottom: 0; }
     .single-product-item .product-details .product-title a {
@@ -3170,7 +3170,7 @@ Quick View Modal Style
       .products-wrapper.products-list-view .single-product-item .product-thumb img {
         width: 250px; } }
   .products-wrapper.products-list-view .single-product-item .product-details {
-    background-color: #fff;
+    /*background-color: #fff;*/
     padding: 30px 20px; }
     @media only screen and (max-width: 575px) {
       .products-wrapper.products-list-view .single-product-item .product-details {
