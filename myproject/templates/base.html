@@ -84,11 +84,9 @@
                                                 </li>
                                             </ul>
                                         {% else %}
-                                            <form class="form-inline ml-auto">
-                                                <ul>
-                                                    <li><a href="{% url 'login' %}">登录</a></li>
-                                                    <li><a href="{% url 'signup' %}">注册</a></li>
-                                                </ul>
+                                            <form class="form-inline ml-auto"><!--虽然有warning但是为了样式必须这样写-->
+                                                <li><a href="{% url 'login' %}">登录</a></li>
+                                                <li><a href="{% url 'signup' %}">注册</a></li>
                                             </form>
                                         {% endif %}{% endblock %}
                                         <li id="top-nickname"></li>
@@ -143,9 +141,10 @@
                                         <ul class="main-navbar clearfix">
                                             <li class="dropdown-show"><a href="{% url 'home' %}" class="arrow-toggle">主界面</a>
                                                 <ul class="dropdown-nav sub-dropdown">
+                                                    <li><a href="{% url 'board_topics' 4 %}">实验室</a></li>
+                                                    <li><a href="{% url 'board_topics' 5 %}">博客专区</a></li>
                                                     <li><a href="{% url 'board_topics' 6 %}">个人创意</a></li>
-                                                    <li><a href="{% url 'board_topics' 5 %}">委托专区</a></li>
-                                                    <li><a href="{% url 'board_topics' 4 %}">实验室项目</a></li>
+                                                    <li><a href="{% url 'board_topics' 7 %}">溢出专区</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="{% url 'my_account' %}">个人信息</a></li>
