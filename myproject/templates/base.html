@@ -77,14 +77,14 @@
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
                                                         <a class="dropdown-item" href="{% url 'my_account' %}">我的账户</a>
                                     
-                                                        <a class="dropdown-item" href="{% url 'password_change' %}">修改密码</a>
+                                                        <!-- <a class="dropdown-item" href="{% url 'password_change' %}">修改密码</a> -->
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item" href="{% url 'logout'%}">登出</a>
                                                     </div>
                                                 </li>
                                             </ul>
                                         {% else %}
-                                            <form class="form-inline ml-auto">
+                                            <form class="form-inline ml-auto"><!--虽然有warning但是为了样式必须这样写-->
                                                 <li><a href="{% url 'login' %}">登录</a></li>
                                                 <li><a href="{% url 'signup' %}">注册</a></li>
                                             </form>
@@ -113,26 +113,18 @@
                             <!-- Logo Area End -->
             
                             <!-- Search Box Area Start -->
-                            <!-- search has bug -->
                             <div class="col-8 col-md-7 col- m-auto "> 
                                 <div class="search-box-wrap">
-                                    <form class="search-form d-flex" action="#" method="get">
-                                        <input type="search" name="search" placeholder="搜索..."/>
-                                        <button class="btn btn-search">
+                                    <form class="search-form d-flex" method="post" novalidate>
+                                        {% csrf_token %}
+                                        <input type="search" name="search_input" placeholder="搜索..."/>
+                                        <button class="btn btn-search" type="submit" name="search_submit">
                                             <img src="{% static 'img/icon-search.png' %}" alt="搜索"/>
                                         </button>
                                     </form>
                                 </div>
                             </div>
                             <!-- Search Box Area End -->
-                            <!--bug change project-->
-                            <!-- Mini Cart Area Start -->
-                            <div class="col-12 col-md-3 col-xl-2 m-auto text-center text-lg-right mt-xs-15">
-                                <div class="minicart-wrapper">
-                                    <a href="lab-post.html" class="btn btn-minicart">发布实验室项目 <!--<sup class="cart-count">3</sup>--></a>
-                                </div>
-                            </div>
-                            <!-- Mini Cart Area End -->
                         </div>
                     </div>
                 </div>
@@ -149,9 +141,10 @@
                                         <ul class="main-navbar clearfix">
                                             <li class="dropdown-show"><a href="{% url 'home' %}" class="arrow-toggle">主界面</a>
                                                 <ul class="dropdown-nav sub-dropdown">
+                                                    <li><a href="{% url 'board_topics' 4 %}">实验室</a></li>
+                                                    <li><a href="{% url 'board_topics' 5 %}">博客专区</a></li>
                                                     <li><a href="{% url 'board_topics' 6 %}">个人创意</a></li>
-                                                    <li><a href="{% url 'board_topics' 5 %}">委托专区</a></li>
-                                                    <li><a href="{% url 'board_topics' 4 %}">实验室项目</a></li>
+                                                    <li><a href="{% url 'board_topics' 7 %}">溢出专区</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="{% url 'my_account' %}">个人信息</a></li>
@@ -168,23 +161,6 @@
             </header>
             <!--== End Header Section ==-->
             
-            <!--== Start Page Breadcrumb ==-->
-            {% comment %} <div class="page-breadcrumb-wrap">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="page-breadcrumb">
-                                <ul class="nav">
-                                    <li><a href="main.html">主界面</a></li>
-                                    <li><a href="idea.html">实验室项目区</a></li>
-                                    <li><a href="idea-detail.html" class="active">实验室项目信息</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> {% endcomment %}
-            <!--== End Page Breadcrumb ==-->
             <div class="container">
                 <ol class="breadcrumb my-4">
                     {% block breadcrumb %}

@@ -1,83 +1,75 @@
-
 {% extends 'base.html' %}
 
+{% load gravatar %}
+
 {% load humanize %}
+
 {% load static %}
+
 {% block title %}
-  {{ board.name }} - {{ block.super }}
+    {{ board.name }} - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
-  <li class="breadcrumb-item active">{{ board.name }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
+    <li class="breadcrumb-item active">{{ board.name }}</li>
 {% endblock %}
 
 {% block content %}
-  <div class="mb-4">
-    <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary">发起项目</a>
-  </div>
+    <div class="mb-4">
+        <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary">发起项目</a>
+    </div>
 
-  <table class="table table-striped mb-4">
-    <thead class="thead-inverse ">
-      <tr>
-        <th>主题</th>
-        <th>创意介绍</th>
-        <th>发起人</th>
-        <th>回复数</th>
-        <th>浏览次数</th>
-        <th>最后更新</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for topic in topics %}
-        {% url 'topic_posts' board.pk topic.pk as topic_url %}
-        <tr>
-          <td style="width: 200px;">		
-          <div>			
-                <div class="single-product-item">
-                    <div class="product-details">
-                        <h2 class="product-title">
-                          <a href="{{ topic_url }}">{{ topic.subject }}</a>
-                        </h2>
-                        <p class="pro-desc"><br /></p>
-                    </div>
-                    <figure class="product-thumb">
-                        <a href="{{ topic_url }}">
-                          <img src={% static "assets/img/about.jpg" %} alt="Product">
-                        </a>
-                        <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View">
-                          <i class="fa fa-eye"></i>
-                        </a>
-                    </figure>
-                </div>
-             </div>                  	
-
-            {% comment %} 
-              <p class="mb-0">
-                <a href="{{ topic_url }}">{{ topic.subject }}</a>
-              </p>
-              <small class="text-muted">
-                Pages:
-                {% for i in topic.get_page_range %}
-                  <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
-                {% endfor %}
-                {% if topic.has_many_pages %}
-                ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+    <table class="table table-striped mb-4">
+        <thead class="thead-inverse ">
+            <tr>
+                <th>主题</th>
+                {% if board.name == '实验室' %}<th>研究方向</th>{% endif %}
+                <th>{% if board.name == '个人创意' %}创意简介{% elif board.name == '实验室' %}实验室简介{% else %}文章简介{% endif %}</th>
+                <th>{% if board.name == '个人创意' or board.name == '实验室' %}发起人{% elif board.name == '博客专区' %}作者{% else %}提问者{% endif %}</th>
+                {% if board.name != '实验室' %}
+                <th>回复数</th>
+                <th>浏览次数</th>
                 {% endif %}
-              </small> 
-            {% endcomment %}
-          </td>
-          <td class="align-middle">{{ topic.posts.first }}</td>
-          <td class="align-middle">{{ topic.starter.username }}</td>
-          <td class="align-middle">{{ topic.replies }}</td>
-          <td class="align-middle">{{ topic.views }}</td>
-          <td class="align-middle">{{ topic.last_updated|naturaltime }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  
-  {% include 'includes/pagination.html' %}
-
+                <th>最后更新</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for topic in topics %}
+                {% url 'topic_posts' board.pk topic.pk as topic_url %}
+                <tr>
+                    <td style="width: 200px;">
+                        <div class="single-product-item">
+                            <div class="product-details" align="center">
+                                <h2 class="product-title">
+                                    <a href="{{ topic_url }}">{{ topic.subject }}</a>
+                                </h2>
+                                <p class="pro-desc"><br /></p>
+                            </div>
+                            <figure class="product-thumb">
+                                <div align="center">
+                                    <a href="{{ topic_url }}">
+                                        <img style="max-width: 300px; max-height: 300px; " src={% if topic.photo %}{{ topic.photo.url }}{% else %}{% static 'img/logo.png' %}{% endif %} alt="picture">
+                                    </a>
+                                    <a href="{{ topic_url }}" class="btn btn-round btn-cart" title="Quick View">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </div>
+                            </figure>
+                        </div>
+                    </td>
+                    {% if board.name == '实验室' %}<td class="align-middle">{{ topic.direction }}</td>{% endif %}
+                    <td class="align-middle" style="max-width: 300px;">{{ topic.posts.first }}</td>
+                    <td class="align-middle">{{ topic.starter.username }}</td>
+                    {% if board.name != '实验室' %}
+                    <td class="align-middle">{{ topic.replies }}</td>
+                    <td class="align-middle">{{ topic.views }}</td>
+                    {% endif %}
+                    <td class="align-middle">{{ topic.last_updated|naturaltime }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include 'includes/pagination.html' %}
 {% endblock %}

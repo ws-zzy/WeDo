@@ -1,10 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'base_accounts.html' %}
 
 {% load gravatar %}
 
 {% load static %}
 
-{% block title %}{{ topic.subject }}{% endblock %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>

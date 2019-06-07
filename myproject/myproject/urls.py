@@ -47,5 +47,6 @@ urlpatterns = [
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post'),
     url(r'^admin/', admin.site.urls),
+    url(r'^search/(?P<pk>.+)/$', views.search, name='search'), #搜索内容直接加在url
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -118,7 +118,9 @@
                             <div class="media border p-3 mb-5 h-100">
                                 <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                                 <div class="media-body">
-                                    <h3>{{ star.subject}}</h3>
+                                    <a href="{% url 'topic_posts' star.board.pk star.pk %}">
+                                        <h3>{{ star.subject}}</h3>
+                                    </a>
                                     <p>{{ star.posts.first }}</p>
                                 </div>
                             </div>
@@ -143,7 +145,9 @@
                             <div class="media border p-3 mb-5 h-100">
                                 <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                                 <div class="media-body">
-                                    <h3>{{ project.subject}}</h3>
+                                    <a href="{% url 'topic_posts' project.board.pk project.pk %}">
+                                        <h3>{{ project.subject}}</h3>
+                                    </a>
                                     <p>{{ project.posts.first }}</p>
                                 </div>
                             </div>

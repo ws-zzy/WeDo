@@ -7,17 +7,46 @@ from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.urls import reverse
+from django.contrib import messages
 
-from .forms import NewTopicForm, PostForm
+from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm
 from .models import Board, Post, Topic
 from accounts.models import Favorite
 
+from fuzzywuzzy import fuzz, process
 
 class BoardListView(ListView):
     model = Board
     context_object_name = 'boards'
     template_name = 'home.html'
 
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            home_url = reverse('home')
+            return redirect(url)
+
+def search(request, pk):
+    topic_out = list()
+    topic_set = Topic.objects.all()
+    show_list = list()
+    for topic in topic_set:
+        ratio_subject = fuzz.partial_ratio(pk, topic.subject)
+        ratio_describe = fuzz.partial_ratio(pk, topic.posts.all()[0].message)
+        ratio = ratio_subject + 0.7 * ratio_describe
+        if ratio > 40:
+            topic_out.append((topic, ratio))
+    # bubble bubble
+    for i in range(len(topic_out)-1, 0, -1):
+        for j in range(0, i):
+            if topic_out[j+1][1] > topic_out[j][1]:
+                temp = topic_out[j]
+                topic_out[j] = topic_out[j+1]
+                topic_out[j+1] = temp
+    for topic in topic_out:
+        show_list.append(topic[0])
+    return render(request, 'search.html', {'show_list': show_list})
 
 class TopicListView(ListView):
     model = Topic
@@ -33,6 +62,12 @@ class TopicListView(ListView):
         self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
         return queryset
+        
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+        return redirect(url)
 
 
 
@@ -69,6 +104,12 @@ class PostListView(ListView):
         queryset = self.topic.posts.order_by('created_at')
         return queryset
 
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+        return redirect(url)
+
 @login_required
 def favorite(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
@@ -86,13 +127,25 @@ def favorite(request, pk, topic_pk):
 def new_topic(request, pk):
     board = get_object_or_404(Board, pk=pk)
     if request.method == 'POST':
-        form = NewTopicForm(request.POST, request.FILES)
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            return redirect(url)
+
+        if board.name == '个人创意':
+            form = NewTopicForm(request.POST, request.FILES)
+        elif board.name == '博客专区':
+            form = NewBlogForm(request.POST, request.FILES)
+        elif board.name == '实验室':
+            form = NewLabForm(request.POST, request.FILES)
+        else: # 溢出专区
+            form = NewOverflowForm(request.POST, request.FILES)
         if form.is_valid():
             topic = form.save(commit=False)
             topic.board = board
             topic.starter = request.user
             topic.photo = request.FILES['photo']
-            
+
             # files file_field=request.FILES['file']
             topic.save()
             Post.objects.create(
@@ -101,8 +154,16 @@ def new_topic(request, pk):
                 created_by=request.user
             )
             return redirect('topic_posts', pk=pk, topic_pk=topic.pk)
+
     else:
-        form = NewTopicForm()
+        if board.name == '个人创意':
+            form = NewTopicForm()
+        elif board.name == '博客专区':
+            form = NewBlogForm()
+        elif board.name == '实验室':
+            form = NewLabForm()
+        else: # 溢出专区
+            form = NewOverflowForm()
     return render(request, 'new_topic.html', {'board': board, 'form': form})
 
 
@@ -110,6 +171,11 @@ def new_topic(request, pk):
 def reply_topic(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
     if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            return redirect(url)
+
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -146,8 +212,24 @@ class PostUpdateView(UpdateView):
         return queryset.filter(created_by=self.request.user)
 
     def form_valid(self, form):
+        # if 'search_submit' in form:
+        #     print('in form')
+        #     search_content = form['search_input']
+        #     url = reverse('search', kwargs={'pk': search_content})
+        #     return redirect(url)
         post = form.save(commit=False)
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
         return redirect('topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
+
+
+    def post(self, request, *args, **kwargs):
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            return redirect(url)
+        # print(dir(super(PostUpdateView, self).post()))
+
+        return super(PostUpdateView, self).post(self, request, *args, **kwargs)
+
