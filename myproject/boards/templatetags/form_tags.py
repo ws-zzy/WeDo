@@ -8,9 +8,10 @@ def field_type(bound_field):
 @register.filter
 def input_class(bound_field):
     css_class = ''
+
     if bound_field.form.is_bound:
-        if bound_field.errors:
-            css_class = 'is-invalid'
-        elif field_type(bound_field) != 'PasswordInput':
+        if (not bound_field.errors) and (field_type(bound_field) != 'PasswordInput'):
             css_class = 'is-valid'
+        elif bound_field.errors:
+            css_class = 'is-invalid'
     return 'form-control {}'.format(css_class)
