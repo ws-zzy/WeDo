@@ -56,48 +56,6 @@ class Topic(models.Model):
     def get_last_ten_posts(self):
         return self.posts.order_by('-created_at')[:10]
 
-# class Lab(models.Model):
-#     name = models.CharField(max_length=15, unique=True)
-#     teachers = models.CharField(max_length=50)
-#     direction = models.CharField(max_length=50)
-#     staff = models.IntegerField()
-#     last_updated = models.DateTimeField(auto_now_add=True)
-#     board = models.ForeignKey(Board, related_name='labs')
-#     starter = models.ForeignKey(User, related_name='labs')
-#     views = models.PositiveIntegerField(default=0)
-#     photo = models.ImageField(null=True)
-#     def __str__(self):
-#         return self.name
-#
-# class Blog(models.Model):
-#     name = models.CharField(max_length=15)
-#     last_updated = models.DateTimeField(auto_now_add=True)
-#     board = models.ForeignKey(Board, related_name='blogs', on_delete=models.CASCADE)
-#     author = models.ForeignKey(User, related_name='blogs', on_delete=models.CASCADE)
-#     views = models.PositiveIntegerField(default=0)
-#     photo = models.ImageField(null=True)
-#     def __str__(self):
-#         return self.name
-#
-#     def get_page_count(self):
-#         count = self.posts.count()
-#         pages = count / 20
-#         return math.ceil(pages)
-#
-#     def has_many_pages(self, count=None):
-#         if count is None:
-#             count = self.get_page_count()
-#         return count > 6
-#
-#     def get_page_range(self):
-#         count = self.get_page_count()
-#         if self.has_many_pages(count):
-#             return range(1, 5)
-#         return range(1, count + 1)
-#
-#     def get_last_ten_posts(self):
-#         return self.posts.order_by('-created_at')[:10]
-
 class Post(models.Model):
     message = models.TextField(max_length=4000)
     topic = models.ForeignKey(Topic, related_name='posts', on_delete=models.CASCADE)

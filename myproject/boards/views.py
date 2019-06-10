@@ -12,6 +12,7 @@ from django.contrib import messages
 from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm
 from .models import Board, Post, Topic
 from accounts.models import Favorite
+from sensitive import DFAFilter
 
 from fuzzywuzzy import fuzz, process
 
@@ -132,6 +133,13 @@ def new_topic(request, pk):
             url = reverse('search', kwargs={'pk':search_content})
             return redirect(url)
 
+        # if 'subject' in request.POST:
+        #     subject_clean = DFAFilter.filter(request.POST['subject'])
+        # if 'teachers' in request.POST:
+        #     subject_clean = DFAFilter.filter(request.POST['teachers'])
+        # if 'direction' in request.POST:
+        #     subject_clean = DFAFilter.filter(request.POST['direction'])
+
         if board.name == '个人创意':
             form = NewTopicForm(request.POST, request.FILES)
         elif board.name == '博客专区':
@@ -145,11 +153,13 @@ def new_topic(request, pk):
             topic.board = board
             topic.starter = request.user
             topic.photo = request.FILES['photo']
-
-            # files file_field=request.FILES['file']
+            # filting sensitive words
+            topic.subject = DFAFilter.filter(topic.subject)
+            topic.teachers = DFAFilter.filter(topic.teachers)
+            topic.direction = DFAFilter.filter(topic.direction)
             topic.save()
             Post.objects.create(
-                message=form.cleaned_data.get('message'),
+                message=DFAFilter.filter(form.cleaned_data.get('message')),
                 topic=topic,
                 created_by=request.user
             )
@@ -181,6 +191,8 @@ def reply_topic(request, pk, topic_pk):
             post = form.save(commit=False)
             post.topic = topic
             post.created_by = request.user
+            post.message = DFAFilter.filter(post.message)
+            post.updated_at = timezone.now()
             post.save()
 
             topic.last_updated = timezone.now()
@@ -220,6 +232,7 @@ class PostUpdateView(UpdateView):
         post = form.save(commit=False)
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
+        post.message = DFAFilter.filter(post.message)
         post.save()
         return redirect('topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
 
