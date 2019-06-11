@@ -9,12 +9,13 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.contrib import messages
 
-from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm
-from .models import Board, Post, Topic
+from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm, NewJoinForm
+from .models import Board, Post, Topic, Delegation
 from accounts.models import Favorite
 from sensitive import DFAFilter
 
 from fuzzywuzzy import fuzz, process
+
 
 class BoardListView(ListView):
     model = Board
@@ -27,6 +28,7 @@ class BoardListView(ListView):
             url = reverse('search', kwargs={'pk':search_content})
             home_url = reverse('home')
             return redirect(url)
+
 
 def search(request, pk):
     topic_out = list()
@@ -48,6 +50,7 @@ def search(request, pk):
     for topic in topic_out:
         show_list.append(topic[0])
     return render(request, 'search.html', {'show_list': show_list})
+
 
 class TopicListView(ListView):
     model = Topic
@@ -71,7 +74,6 @@ class TopicListView(ListView):
         return redirect(url)
 
 
-
 class PostListView(ListView):
     model = Post
     context_object_name = 'posts'
@@ -90,6 +92,7 @@ class PostListView(ListView):
         #     kwargs['return_url'] = reverse('my_account')
         # else:
         kwargs['return_url'] = reverse('user_account', kwargs={'user_pk': self.topic.starter.pk})   #<--to here
+        kwargs['staffs'] = self.topic.staffs.all()
         if self.request.user.is_authenticated():
             # print(self.user)
             # print(type(self.user))
@@ -111,6 +114,7 @@ class PostListView(ListView):
             url = reverse('search', kwargs={'pk':search_content})
         return redirect(url)
 
+
 @login_required
 def favorite(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
@@ -121,7 +125,6 @@ def favorite(request, pk, topic_pk):
     else:
         Favorite.star(user, topic)
     return redirect(topic_url)
-
 
 
 @login_required
@@ -209,6 +212,35 @@ def reply_topic(request, pk, topic_pk):
     else:
         form = PostForm()
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
+
+
+@login_required
+def join(request, pk, topic_pk):
+    topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
+    if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk': search_content})
+            return redirect(url)
+
+        form = NewJoinForm(request.POST)
+        if form.is_valid():
+            print(type(form))
+            print(form.cleaned_data.get('加入原因'))
+            print(form.cleaned_data.get('我的技能'))
+            delegation = Delegation.objects.create(topic=topic, user=request.user)
+            delegation.save()
+            print(topic.subject + '招募了：')
+            print(topic.staffs.all())
+            print(request.user.username + '参加了：')
+            print(request.user.joins.all())
+            topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
+            return redirect(topic_url)
+    else:
+        form = NewJoinForm()
+    return render(request, 'join.html', {'topic': topic, 'form': form})
+
+
 
 
 @method_decorator(login_required, name='dispatch')

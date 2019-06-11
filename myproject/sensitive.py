@@ -42,7 +42,7 @@ class DFAFilter(object):
         f.close()
 
     @staticmethod
-    def filter(_message, repl="*"):
+    def filter(_message, repl="▇"):
         if not _message:
             return _message
         f = open("./templates/sensitive_dict.txt", "r")
@@ -73,17 +73,11 @@ class DFAFilter(object):
 
         return ''.join(ret)
 
+
 if __name__ == "__main__":
     sensitive = DFAFilter()
     path = "./templates/sensitive.txt"
     sensitive.parse(path)
-
-    '''
-    message = "傻逼！！孙笑川"
-    result = DFAFilter.filter(message)
-    print(message)
-    print(result)
-    '''
 
 
 

@@ -162,12 +162,26 @@
             <!--== End Header Section ==-->
             
             <div class="container">
-                <ol class="breadcrumb my-4">
-                    {% block breadcrumb %}
-                    {% endblock %}
-                </ol>
-                {% block content %}
-                {% endblock %}
+{#                <div class="row">#}
+{#                    <div class="col-md-2" align="center">#}
+{#                        {% block leftpart %}#}
+{#                        {% endblock %}#}
+{#                    </div>#}
+{#                    <div class="col-md-8">#}
+                        <ol class="breadcrumb my-4">
+                            {% block breadcrumb %}
+                            {% endblock %}
+                        </ol>
+
+                        {% block content %}
+                        {% endblock %}
+{#                    </div>#}
+{#                    <div class="col-md-2" align="center">#}
+{#                        {% block rightpart %}#}
+{#                        {% endblock %}#}
+{#                    </div>#}
+{#                </div>#}
+
             </div>
         {% endblock body %}
 
