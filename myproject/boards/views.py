@@ -13,6 +13,7 @@ from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowF
 from .models import Board, Post, Topic, Delegation
 from accounts.models import Favorite
 from sensitive import DFAFilter
+from method import paragraph_dividing
 
 from fuzzywuzzy import fuzz, process
 
@@ -162,7 +163,7 @@ def new_topic(request, pk):
             topic.direction = DFAFilter.filter(topic.direction)
             topic.save()
             Post.objects.create(
-                message=DFAFilter.filter(form.cleaned_data.get('message')),
+                message=paragraph_dividing(DFAFilter.filter(form.cleaned_data.get('message'))),
                 topic=topic,
                 created_by=request.user
             )
@@ -194,7 +195,7 @@ def reply_topic(request, pk, topic_pk):
             post = form.save(commit=False)
             post.topic = topic
             post.created_by = request.user
-            post.message = DFAFilter.filter(post.message)
+            post.message = paragraph_dividing(DFAFilter.filter(post.message))
             post.updated_at = timezone.now()
             post.save()
 
@@ -264,7 +265,7 @@ class PostUpdateView(UpdateView):
         post = form.save(commit=False)
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
-        post.message = DFAFilter.filter(post.message)
+        post.message = paragraph_dividing(DFAFilter.filter(post.message))
         post.save()
         return redirect('topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
 
