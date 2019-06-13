@@ -94,3 +94,9 @@ class Delegation(models.Model):
         if delegation:
             delegation.delete()
 
+    @staticmethod
+    def is_delegation(topic, user):
+        delegation = Delegation.objects.filter(topic=topic, user=user).all()
+        if delegation:
+            return True
+        return False

@@ -109,6 +109,15 @@ def letter_read(request, user_pk, letter_pk):
 
 
 @login_required
+def letter_handle(request, user_pk, letter_pk):
+    letter = Letter.objects.get(pk=letter_pk)
+    letter.read = True
+    letter.handle = True
+    letter.save()
+    return redirect(reverse('letter', kwargs={'user_pk': user_pk}))
+
+
+@login_required
 def accept(request, pk, topic_pk, letter_pk):
     from_user = Letter.objects.get(pk=letter_pk).from_user
     to_user = Letter.objects.get(pk=letter_pk).to_user
@@ -117,4 +126,16 @@ def accept(request, pk, topic_pk, letter_pk):
     letter.read = True
     letter.save()
     Delegation.delegate(Topic.objects.get(pk=topic_pk), from_user)
+    return redirect(reverse('letter', kwargs={'user_pk': to_user.pk}))
+
+
+@login_required
+def allow(request, pk, topic_pk, letter_pk):
+    from_user = Letter.objects.get(pk=letter_pk).from_user
+    to_user = Letter.objects.get(pk=letter_pk).to_user
+    letter = Letter.objects.get(pk=letter_pk)
+    letter.handle = True
+    letter.read = True
+    letter.save()
+    Delegation.undelegate(Topic.objects.get(pk=topic_pk), from_user)
     return redirect(reverse('letter', kwargs={'user_pk': to_user.pk}))

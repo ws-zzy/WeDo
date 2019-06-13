@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.contrib import messages
 
-from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm, NewJoinForm
+from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm, NewJoinForm, NewQuitForm
 from .models import Board, Post, Topic, Delegation
 from accounts.models import Favorite, Letter
 from sensitive import DFAFilter
@@ -94,11 +94,30 @@ class PostListView(ListView):
         # else:
         kwargs['return_url'] = reverse('user_account', kwargs={'user_pk': self.topic.starter.pk})   #<--to here
         kwargs['staffs'] = self.topic.staffs.all()
+        kwargs['button'] = 0 # 未登录：0，未发信：1，已发信：2，已同意：3
         if self.request.user.is_authenticated():
             # print(self.user)
             # print(type(self.user))
             # print(self.topic)
             # print(type(self.topic))
+            if not self.user.pk == self.topic.starter.pk:
+                kwargs['button'] = 1
+                # if (Letter.is_letter(self.user, self.topic.starter, self.topic, 0) or Letter.is_letter(self.user, self.topic.starter, self.topic, 1)) and (not Delegation.is_delegation(self.topic, self.user)):
+                if not Delegation.is_delegation(self.topic, self.user):
+                    letter_list = list()
+                    if self.topic.board.name == '个人创意':
+                        letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter, topic=self.topic, kind=0)
+                    elif self.topic.board.name == '实验室':
+                        letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter,
+                                                            topic=self.topic, kind=1)
+                    flag = True
+                    for letter in letter_list:
+                        if not letter.handle:
+                            flag = False
+                    if not flag: # 有未处理的信件
+                        kwargs['button'] = 2
+                elif Delegation.is_delegation(self.topic, self.user):
+                    kwargs['button'] = 3
             kwargs['star'] = Favorite.is_star(self.user, self.topic)
         return super().get_context_data(**kwargs)
 
@@ -220,42 +239,57 @@ def reply_topic(request, pk, topic_pk):
 @login_required
 def join(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
+    joined = Delegation.is_delegation(topic, request.user)
     if request.method == 'POST':
         if 'search_submit' in request.POST:
             search_content = request.POST['search_input']
             url = reverse('search', kwargs={'pk': search_content})
             return redirect(url)
+        if not joined:
+            form = NewJoinForm(request.POST)
+            if form.is_valid():
+                if topic.board.name == '个人创意':
+                    letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=0, topic=topic,
+                                                   read=False, handle=False)
+                    letter.message = '亲爱的 ***' + topic.starter.username + '*** 你好，我想要参与开发你发起的 ***' + topic.subject + '*** 项目。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
+                                     form.cleaned_data.get(
+                                         '加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
+                                     '\r\n\r\n希望能得到你的同意！'
+                    letter.save()
+                elif topic.board.name == '实验室':
+                    letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=1, topic=topic,
+                                                   read=False, handle=False)
+                    letter.message = '尊敬的 ***' + topic.starter.username + '*** 同学你好，我想要加入 ***' + topic.subject + '*** 实验室。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
+                                     form.cleaned_data.get(
+                                         '加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
+                                     '\r\n\r\n希望能得到你的同意！'
+                    letter.save()
+                topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
+                return redirect(topic_url)
+        else:
+            form = NewQuitForm(request.POST)
+            if form.is_valid():
+                if topic.board.name == '个人创意':
+                    letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=4, topic=topic,
+                                                   read=False, handle=False)
+                    letter.message = '亲爱的 ***' + topic.starter.username + '*** 你好，很遗憾，我不能再担任你 ***'+ topic.subject + '*** 项目的开发团队的一员。\r\n\r\n' + \
+                        '***我退出的原因是***：\r\n\r\n' + form.cleaned_data.get('退出原因') + '\r\n\r\n希望能得到你的同意！'
+                    letter.save()
+                elif topic.board.name == '实验室':
+                    letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=5, topic=topic,
+                                                   read=False, handle=False)
+                    letter.message = '尊敬的 ***' + topic.starter.username + '*** 同学你好，我想要退出 ***' + topic.subject + '*** 实验室。\r\n\r\n' + \
+                                     '***我退出的原因是***：\r\n\r\n' + form.cleaned_data.get('退出原因') + '\r\n\r\n希望能得到你的同意！'
+                    letter.save()
+                topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
+                return redirect(topic_url)
 
-        form = NewJoinForm(request.POST)
-        if form.is_valid():
-            # print(type(form))
-            # print(form.cleaned_data.get('加入原因'))
-            # print(form.cleaned_data.get('我的技能'))
-            # delegation = Delegation.objects.create(topic=topic, user=request.user)
-            # delegation.save()
-            if topic.board.name == '个人创意':
-                letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=0, topic=topic, read=False, handle=False)
-                letter.message = '亲爱的 ***' + topic.starter.username + '*** 你好，我想要参与制作你发起的项目。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
-                                form.cleaned_data.get('加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
-                                '\r\n\r\n希望能得到你的同意！'
-                letter.save()
-            elif topic.board.name == '实验室':
-                letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=1, topic=topic, read=False, handle=False)
-                letter.message = '尊敬的 ***' + topic.starter.username + '*** 同学你好，我想要加入你们的实验室。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
-                                form.cleaned_data.get('加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
-                                '\r\n\r\n希望能得到你的同意！'
-                letter.save()
-            # print(topic.subject + '招募了：')
-            # print(topic.staffs.all())
-            # print(request.user.username + '参加了：')
-            # print(request.user.joins.all())
-            topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
-            return redirect(topic_url)
     else:
-        form = NewJoinForm()
+        if not joined:
+            form = NewJoinForm()
+        else:
+            form = NewQuitForm()
     return render(request, 'join.html', {'topic': topic, 'form': form})
-
-
 
 
 @method_decorator(login_required, name='dispatch')

@@ -128,10 +128,12 @@
 
 
 <!--== Page Content Wrapper Start ==-->
-{#<div class="alert alert-success alert-dismissible fade show">#}
-{#            <button type="button" class="close" data-dismiss="alert">&times;</button>#}
-{#            <strong>您的申请已发送!</strong> 请耐心等待楼主答复。#}
-{#        </div>#}
+<div id="information">
+{#    <div class="alert alert-warning alert-dismissible fade show">#}
+{#        <button type="button" class="close" data-dismiss="alert">&times;</button>#}
+{#        <strong>您已发送过申请!</strong> 请耐心等待楼主答复。#}
+{#    </div>#}
+</div>
 <div id="page-content-wrapper">
     <div class="container">
         <div class="row">
@@ -144,13 +146,18 @@
                         <h2 class="sidebar-title">{% if topic.board.name == '个人创意' %}项目开发团队名单{% elif topic.board.name == '实验室' %}实验室人员名单{% endif %}</h2>
                         <div class="sidebar-body">
                             <div class="sidebar-search">
-                                <h3><a href={% url 'user_account' topic.starter.pk %}><strong>{{ topic.starter.username }}</strong></a></h3>
                                 {% for staff in staffs %}
                                     <h3><a href={% url 'user_account' staff.pk %}><strong>{{ staff.username }}</strong></a></h3>
                                 {% endfor %}
                             </div>
                         </div>
-                        <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>点我开团</a>
+                        {% if button == 1 %}
+                            <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>点我开团</a>
+                        {% elif button == 2 %}
+                            <button class="btn btn-cart-large my-4" onclick="show_info()"><i class="fa fa-mouse-pointer"></i>点我开团</button>
+                        {% elif button == 3 %}
+                            <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>退出开发团队</a>
+                        {% endif %}
                     </div>
                     <!-- Single Sidebar Item End -->
 
@@ -182,11 +189,19 @@
             <div class="col-lg-8">
                 <article class="single-blog-content-wrap">
                     <div class="post-header">
-                        <figure class="post-thumbnail">
-                             <a href="{{ topic.photo.url }}" class="single-gallery-item">
-                                 <img src="{{ topic.photo.url }}" alt="创意图片"/>
-                             </a>
-                        </figure>
+{#                        <figure>#}
+{#                             <a href="{{ topic.photo.url }}" class="single-gallery-item">#}
+{#                                 <img src="{{ topic.photo.url }}" alt="创意图片"/>#}
+{#                             </a>#}
+{#                        </figure>#}
+                        <div class="single-blog-wrap">
+                            <figure class="blog-thumb">
+                                <a href="{{ topic.photo.url }}" class="single-gallery-item"><img alt="Blog" src="{{ topic.photo.url }}"></a>
+                                <figcaption class="blog-icon">
+                                    <a href="{{ topic.photo.url }}" class="single-gallery-item"><i class="fa fa-file-image-o"></i></a>
+                                </figcaption>
+                            </figure>
+                        </div>
 
                         <div class="post-meta">
                             <h2>{{ topic.subject }}</h2>
@@ -260,4 +275,15 @@
 <!--== Page Content Wrapper End ==-->
 
 </header>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    function show_info(){
+        {#document.getElementById("information").classList.add("alert", "alert-warning", "alert-dismissible", "fade", "show");#}
+        document.getElementById("information").innerHTML += '<div class="alert alert-warning alert-dismissible fade show"> \
+        <button type="button" class="close" data-dismiss="alert">&times;</button> \
+        <strong>您已发送过申请!</strong> 请耐心等待楼主答复。</div>'
+    }
+</script>
 {% endblock %}

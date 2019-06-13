@@ -3207,11 +3207,11 @@ Quick View Modal Style
 /*==============================
 Recent Post Area Start
 ================================*/
-.single-blog-wrap {
-  text-align: center; }
+/*.single-blog-wrap {*/
+  /*text-align: center; }*/
   .single-blog-wrap .blog-thumb {
     position: relative;
-    max-height: 300px;
+    /*max-height: 300px;*/
     overflow: hidden; }
     .single-blog-wrap .blog-thumb:hover .blog-icon {
       -webkit-transform: scaleX(1);
@@ -3236,8 +3236,8 @@ Recent Post Area Start
       position: absolute;
       left: 0;
       top: 0;
-      height: 100%;
-      width: 100%;
+      /*height: 100%;*/
+      /*width: 100%;*/
       opacity: 0;
       -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
       filter: alpha(opacity=0);
@@ -3251,7 +3251,8 @@ Recent Post Area Start
       -moz-transition: all 0.4s ease-out;
       -o-transition: all 0.4s ease-out;
       transition: all 0.4s ease-out;
-      width: 100%; }
+      /*width: 100%; */
+    }
     .single-blog-wrap .blog-thumb .blog-icon {
       position: absolute;
       top: 50%;

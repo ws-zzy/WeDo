@@ -84,7 +84,7 @@ class NewJoinForm(forms.Form):
     加入原因 = forms.CharField(
         required=True,
         widget=forms.Textarea(
-            attrs={'rows': 2, 'placeholder': '请描述你想要加入本项目/实验室的原因。'}
+            attrs={'rows': 5, 'placeholder': '请描述你想要加入本项目/实验室的原因。'}
         ),
         max_length=500,
         help_text='最多输入500字符。'
@@ -92,9 +92,19 @@ class NewJoinForm(forms.Form):
     我的技能 = forms.CharField(
         required=True,
         widget=forms.Textarea(
-            attrs={'rows': 2, 'placeholder': '介绍一下你自己！'}
+            attrs={'rows': 3, 'placeholder': '介绍一下你自己！'}
         ),
         max_length=500,
         help_text='最多输入500字符。'
+    )
+
+class NewQuitForm(forms.Form):
+    退出原因 = forms.CharField(
+        required=True,
+        widget=forms.Textarea(
+            attrs={'rows': 5, 'placeholder': '请描述你想要退出本项目/实验室的原因。'}
+        ),
+        max_length=1000,
+        help_text='最多输入1000字符。'
     )
 

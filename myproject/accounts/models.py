@@ -88,7 +88,7 @@ class Letter(models.Model):
     to_user = models.ForeignKey(User, related_name='receive_letters', on_delete=models.CASCADE)
     read = models.BooleanField(default=False)
     handle = models.BooleanField(default=False)
-    kind = models.PositiveIntegerField(default=0) # 0-入团申请 1-加入实验室申请 2-回复 3-回信
+    kind = models.PositiveIntegerField(default=0) # 0-入团申请 1-加入实验室申请 2-回复通知 3-回信 4-退团申请 5-退出实验室申请
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -113,6 +113,13 @@ class Letter(models.Model):
     def get_alread_receive_letters(user):
         alread_receive_letters = Letter.objects.filter(to_user=user, read=True)
         return alread_receive_letters
+
+    @staticmethod
+    def is_letter(from_user, to_user, topic, kind):
+        letter = Letter.objects.filter(from_user=from_user, to_user=to_user, topic=topic, kind=kind).all()
+        if letter:
+            return True
+        return False
 
     def get_message_as_markdown(self):
         return mark_safe(markdown(self.message, safe_mode='escape'))
