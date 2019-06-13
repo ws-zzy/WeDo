@@ -81,3 +81,16 @@ class Delegation(models.Model):
 
     def __str__(self):
         return self.user.username + ' joins ' + self.topic.subject
+
+    @staticmethod
+    def delegate(topic, user):
+        delegation = Delegation.objects.filter(topic=topic, user=user).all()
+        if not delegation:
+            Delegation(topic=topic, user=user).save()
+
+    @staticmethod
+    def undelegate(topic, user):
+        delegation = Delegation.objects.filter(topic=topic, user=user).all()
+        if delegation:
+            delegation.delete()
+

@@ -41,6 +41,8 @@
                     <h4 class="card-title">{{ user.username }}</h4>
                     {% if is_self == False %}
                         <a href="{% url 'follow' user.pk %}" class="btn btn-primary" id="follow_button">{% if is_followed %}取消关注{% else %}关注{% endif %}</a>
+                    {% else %}
+                        <a href="{% url 'letter' user.pk %}"><i class="fa fa-envelope"></i> 站内信</a>
                     {% endif %}
                 </div>
             </div>
@@ -58,7 +60,8 @@
                             </div>
                             {% if is_self %}
                             <div class="col-6">
-                                <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>
+{#                                <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>#}
+                                <a href="#" style="width: 100px;" role="button" data-toggle="modal" data-target="#mail-mod"><i class="fa fa-pencil"></i> 修改</a>
                             </div>
                             {% endif %}
                         </div>
@@ -86,7 +89,8 @@
                             </div>
                             {% if is_self %}
                             <div class="col-6">
-                                <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>
+{#                                <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>#}
+                                <a style="width: 100px;" href={% url 'password_change' %} role="button"><i class="fa fa-pencil"></i> 修改</a>
                             </div>
                             {% endif %}
                         </div>
@@ -116,7 +120,7 @@
                     <!--div id="my-collection-show"-->
                         {% for star in stars %}
                             <div class="media border p-3 mb-5 h-100">
-                                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                                <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                                 <div class="media-body">
                                     <a href="{% url 'topic_posts' star.board.pk star.pk %}">
                                         <h3>{{ star.subject}}</h3>
@@ -143,7 +147,7 @@
                     <div id="my-release" class="container tab-pane fade"><br>
                         {% for project in projects.all %}
                             <div class="media border p-3 mb-5 h-100">
-                                <img src={% static "assets/img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                                <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                                 <div class="media-body">
                                     <a href="{% url 'topic_posts' project.board.pk project.pk %}">
                                         <h3>{{ project.subject}}</h3>
@@ -160,82 +164,82 @@
 </div>
 
 <!--模态框-->
-  <div class="modal fade" id="mail-mod">
+<div class="modal fade" id="mail-mod">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">修改邮箱</h3>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <form name="mail-form" method="post">
-          {% csrf_token %}
-          <div class="modal-body">
-            <div class="input-group input-group-lg">
-              <div class="input-group-prepend">
-                <span class="input-group-text w-100">邮箱</span>
-              </div>
-              <input type="email" class="form-control" placeholder="请输入新邮箱" id="mail-input" name="new-email" required autofocus>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">修改邮箱</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
-              <button type="submit" class="btn btn-primary" id="nickname-ok">确定</button>
-          </div>
-        </form>
-      </div>
+            <form name="mail-form" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">邮箱</span>
+                        </div>
+                        <input type="email" class="form-control" placeholder="请输入新邮箱" id="mail-input" name="new-email" required autofocus>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+                    <button type="submit" class="btn btn-primary" id="nickname-ok">确定</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
 
-  <div class="modal fade" id="pwd-mod">
+<div class="modal fade" id="pwd-mod">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">修改密码</h3>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">修改密码</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form name="password-form" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="input-group input-group-lg mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">密码</span>
+                        </div>
+                        <input type="password" class="form-control" placeholder="请输入新密码" id="password-input" name="password1" required autofocus>
+                    </div>
+                    <div class="input-group input-group-lg mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">确认密码</span>
+                        </div>
+                        <input type="password" class="form-control" placeholder="请再次输入新密码" id="password-con-input" name="password2" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
+                    <button type="submit" class="btn btn-primary" id = "password-ok">确定</button>
+                </div>
+            </form>
         </div>
-        <form name="password-form" method="post">
-          {% csrf_token %}
-          <div class="modal-body">
-            <div class="input-group input-group-lg mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text w-100">密码</span>
-              </div>
-              <input type="password" class="form-control" placeholder="请输入新密码" id="password-input" name="password1" required autofocus>
-            </div>
-            <div class="input-group input-group-lg mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text w-100">确认密码</span>
-              </div>
-              <input type="password" class="form-control" placeholder="请再次输入新密码" id="password-con-input" name="password2" required>
-            </div>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary mr-3" data-dismiss="modal">返回</button>
-              <button type="submit" class="btn btn-primary" id = "password-ok">确定</button>
-          </div>
-        </form>
-      </div>
     </div>
-  </div>
+</div>
 {% endblock %}
-  
-  <!--=== Jquery Min Js ===-->
-  <script src={% static "assets/js/vendor/jquery-3.3.1.min.js"%}></script>
-  <!--=== Jquery Migrate Min Js ===-->
-  <script src={% static "assets/js/vendor/jquery-migrate-1.4.1.min.js"%}></script>
-  <!--=== Popper Min Js ===-->
-  <script src={% static "assets/js/vendor/popper.min.js"%}></script>
-  <!--=== Bootstrap Min Js ===-->
-  <script src={% static "assets/js/vendor/bootstrap.min.js"%}></script>
-  <!--=== Ajax Mail Js ===-->
-  <script src={% static "assets/js/ajax-mail.js"%}></script>
-  <!--=== Plugins Min Js ===-->
-  <script src={% static "assets/js/plugins.js" %}></script>
-  
-  <!--=== Active Js ===-->
-  <script src={% static "assets/js/active.js"%}></script>
-  
-  <!--=== Function Js ===-->
-  <script src={% static "js/sign-in.js"%}></script>
-  <script src={% static "js/sign-up.js"%}></script>
-  <script src={% static "js/info.js"%}></script>
+
+{#<!--=== Jquery Min Js ===-->#}
+{#<script src={% static "js/jquery-3.3.1.min.js"%}></script>#}
+{#<!--=== Jquery Migrate Min Js ===-->#}
+{#<script src={% static "js/jquery-migrate-1.4.1.min.js"%}></script>#}
+{#<!--=== Popper Min Js ===-->#}
+{#<script src={% static "js/popper.min.js"%}></script>#}
+{#<!--=== Bootstrap Min Js ===-->#}
+{#<script src={% static "js/bootstrap.min.js"%}></script>#}
+{#<!--=== Ajax Mail Js ===-->#}
+{#<script src={% static "js/ajax-mail.js"%}></script>#}
+{#<!--=== Plugins Min Js ===-->#}
+{#<script src={% static "js/plugins.js" %}></script>#}
+{#  #}
+{#<!--=== Active Js ===-->#}
+{#<script src={% static "js/active.js"%}></script>#}
+{#  #}
+{#<!--=== Function Js ===-->#}
+{#<script src={% static "js/sign-in.js"%}></script>#}
+{#<script src={% static "js/sign-up.js"%}></script>#}
+{#<script src={% static "js/info.js"%}></script>#}

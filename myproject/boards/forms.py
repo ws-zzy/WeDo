@@ -82,6 +82,7 @@ class NewOverflowForm(forms.ModelForm):
 
 class NewJoinForm(forms.Form):
     加入原因 = forms.CharField(
+        required=True,
         widget=forms.Textarea(
             attrs={'rows': 2, 'placeholder': '请描述你想要加入本项目/实验室的原因。'}
         ),
@@ -89,6 +90,7 @@ class NewJoinForm(forms.Form):
         help_text='最多输入500字符。'
     )
     我的技能 = forms.CharField(
+        required=True,
         widget=forms.Textarea(
             attrs={'rows': 2, 'placeholder': '介绍一下你自己！'}
         ),

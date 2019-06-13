@@ -7,7 +7,8 @@ from django.views.generic import UpdateView, ListView
 from django import forms
 
 from .forms import SignUpForm
-from .models import Favorite, Follow
+from .models import Favorite, Follow, Letter
+from boards.models import Delegation, Topic
 
 
 def signup(request):
@@ -21,10 +22,12 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
+
 @login_required
 def my_account(request):
     my_url = reverse('user_account', kwargs={'user_pk': request.user.pk})
     return redirect(my_url)
+
 
 @login_required
 def follow(request, user_pk):
@@ -79,7 +82,7 @@ class UserListView(ListView):
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
             if password1 == password2:
-                user.set_password(password1)
+                    user.set_password(password1)
             # else:
             #     raise render(request, "my_account.html", {'user_pk': user.pk, "stderr": "用户名或密码不正确"})
         user.save()
@@ -87,5 +90,31 @@ class UserListView(ListView):
         return redirect(account_url)
 
 
+@login_required
+def letter(request, user_pk):
+    send_letters = Letter.get_send_letters(request.user)
+    u_r_letters = Letter.get_unread_receive_letters(request.user)
+    a_r_letters = Letter.get_alread_receive_letters(request.user)
+    return render(request, 'letter.html', {'send_letters': send_letters,
+                                           'unread_receive_letters': u_r_letters,
+                                           'alread_receive_letters': a_r_letters, 'user': request.user})
 
 
+@login_required
+def letter_read(request, user_pk, letter_pk):
+    letter = Letter.objects.get(pk=letter_pk)
+    letter.read = True
+    letter.save()
+    return redirect(reverse('letter', kwargs={'user_pk': user_pk}))
+
+
+@login_required
+def accept(request, pk, topic_pk, letter_pk):
+    from_user = Letter.objects.get(pk=letter_pk).from_user
+    to_user = Letter.objects.get(pk=letter_pk).to_user
+    letter = Letter.objects.get(pk=letter_pk)
+    letter.handle = True
+    letter.read = True
+    letter.save()
+    Delegation.delegate(Topic.objects.get(pk=topic_pk), from_user)
+    return redirect(reverse('letter', kwargs={'user_pk': to_user.pk}))

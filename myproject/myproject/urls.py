@@ -34,6 +34,8 @@ urlpatterns = [
 
     url(r'^settings/account/$', accounts_views.my_account, name='my_account'),
     url(r'^settings/account/(?P<user_pk>\d+)/$', accounts_views.UserListView.as_view(), name='user_account'),
+    url(r'^settings/account/(?P<user_pk>\d+)/letter/$', accounts_views.letter, name='letter'),
+    url(r'^settings/account/(?P<user_pk>\d+)/letter/(?P<letter_pk>\d+)/read/$', accounts_views.letter_read, name='letter_read'),
     url(r'^settings/account/(?P<user_pk>\d+)/follow/$', accounts_views.follow, name='follow'),
     url(r'^settings/password/$', auth_views.PasswordChangeView.as_view(template_name='password_change.html'),
         name='password_change'),
@@ -48,6 +50,7 @@ urlpatterns = [
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/join/$', views.join, name='join'),
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post'),
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/letter/(?P<letter_pk>\d+)/accept/$', accounts_views.accept, name='accept'),
     url(r'^admin/', admin.site.urls),
     url(r'^search/(?P<pk>.+)/$', views.search, name='search'), #搜索内容直接加在url
     url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),

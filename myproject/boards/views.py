@@ -11,7 +11,7 @@ from django.contrib import messages
 
 from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm, NewJoinForm
 from .models import Board, Post, Topic, Delegation
-from accounts.models import Favorite
+from accounts.models import Favorite, Letter
 from sensitive import DFAFilter
 from method import paragraph_dividing
 
@@ -162,6 +162,8 @@ def new_topic(request, pk):
             topic.teachers = DFAFilter.filter(topic.teachers)
             topic.direction = DFAFilter.filter(topic.direction)
             topic.save()
+            delegation = Delegation.objects.create(topic=topic, user=request.user)
+            delegation.save()
             Post.objects.create(
                 message=paragraph_dividing(DFAFilter.filter(form.cleaned_data.get('message'))),
                 topic=topic,
@@ -226,15 +228,27 @@ def join(request, pk, topic_pk):
 
         form = NewJoinForm(request.POST)
         if form.is_valid():
-            print(type(form))
-            print(form.cleaned_data.get('加入原因'))
-            print(form.cleaned_data.get('我的技能'))
-            delegation = Delegation.objects.create(topic=topic, user=request.user)
-            delegation.save()
-            print(topic.subject + '招募了：')
-            print(topic.staffs.all())
-            print(request.user.username + '参加了：')
-            print(request.user.joins.all())
+            # print(type(form))
+            # print(form.cleaned_data.get('加入原因'))
+            # print(form.cleaned_data.get('我的技能'))
+            # delegation = Delegation.objects.create(topic=topic, user=request.user)
+            # delegation.save()
+            if topic.board.name == '个人创意':
+                letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=0, topic=topic, read=False, handle=False)
+                letter.message = '亲爱的 ***' + topic.starter.username + '*** 你好，我想要参与制作你发起的项目。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
+                                form.cleaned_data.get('加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
+                                '\r\n\r\n希望能得到你的同意！'
+                letter.save()
+            elif topic.board.name == '实验室':
+                letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=1, topic=topic, read=False, handle=False)
+                letter.message = '尊敬的 ***' + topic.starter.username + '*** 同学你好，我想要加入你们的实验室。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
+                                form.cleaned_data.get('加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
+                                '\r\n\r\n希望能得到你的同意！'
+                letter.save()
+            # print(topic.subject + '招募了：')
+            # print(topic.staffs.all())
+            # print(request.user.username + '参加了：')
+            # print(request.user.joins.all())
             topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
             return redirect(topic_url)
     else:

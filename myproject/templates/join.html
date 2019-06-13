@@ -15,6 +15,14 @@
     <form method="post" novalidate>
         {% csrf_token %}
         {% include 'includes/form.html' %}
-        <button type="submit" class="btn btn-success">确认</button>
+        <button type="submit" class="btn btn-success mb-4" onclick="show_alert()">确认</button>
     </form>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    function show_alert(){
+        alert("您的申请已发送！请耐心等待楼主答复。");
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'user_account' user.pk %}">我的账户</a></li>
+    <li class="breadcrumb-item active">站内信</li>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-4">
+<div id="info-tab-card" class="card">
+<!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#receive_letters">收件箱</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#send_letters">发件箱</a>
+        </li>
+    </ul>
+    <!-- Tab panes -->
+    <div id="info-tab-content" class="tab-content"><!--可以设计scroll安装的位置-->
+        <div id="receive_letters" class="container tab-pane active"><br>
+            <h3 class="md-4" style="text-align: left;">未读信件&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-envelope"></i></h3>
+            {% for letter in unread_receive_letters %}
+                <div class="media border p-3 mb-5 h-100">
+                    <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                    <div class="media-body text-center">
+                        <p data-toggle="modal" data-target="#unread-{{ letter.pk }}">
+                            <h3>来自  {{ letter.from_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% endif %}</h3>
+                        </p>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unread-{{ letter.pk }}">
+                            <i class="fa fa-envelope-open"></i> 查看</button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="unread-{{ letter.pk }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">
+                                    发件人： {{ letter.from_user.username }}<br>
+                                    时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp间： {{ letter.created_at }}<br>
+                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% endif %}
+                                </h3>
+                                <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="close">&times;</a>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{ letter.get_message_as_markdown }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{% url 'accept' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <h3 class="my-4" style="text-align: left;">已读信件&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-envelope-open-o"></i></h3>
+            {% for letter in alread_receive_letters %}
+                 <div class="media border p-3 mb-5 h-100">
+                    <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                    <div class="media-body text-center">
+                        <p data-toggle="modal" data-target="#alread-{{ letter.pk }}">
+                            <h3>来自  {{ letter.from_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% endif %}</h3>
+                        </p>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alread-{{ letter.pk }}">
+                            <i class="fa fa-envelope-open"></i> 查看</button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="alread-{{ letter.pk }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">
+                                    发件人： {{ letter.from_user.username }}<br>
+                                    时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp间： {{ letter.created_at }}<br>
+                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% endif %}
+                                </h3>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{ letter.get_message_as_markdown }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                {% if not letter.handle %}
+                                    <a href="{% url 'accept' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                    <a href="#" class="btn btn-primary" data-dismiss="modal">拒绝</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="send_letters" class="container tab-pane fade"><br>
+            {% for letter in send_letters %}
+                <div class="media border p-3 mb-5 h-100">
+                    <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
+                    <div class="media-body">
+                        <a {% if letter.kind == 0 or letter.kind == 1 %} href="#" data-toggle="modal" data-target="#detail-{{ letter.pk }}"{% elif letter.kind == 2 %} href="{% url 'topic_posts' letter.topic.board.pk letter.topic.pk %}"{% endif %}>
+                            <h3>来自 {{ letter.from_user.username }} 的 {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复{% endif %}</h3>
+                        </a>
+                        <a {% if letter.kind == 0 or letter.kind == 1 %} href="#" data-toggle="modal" data-target="#detail-{{ letter.pk }}"{% elif letter.kind == 2 %} href="{% url 'topic_posts' letter.topic.board.pk letter.topic.pk %}"{% endif %}>
+                            <i class="fa fa-envelope-open"></i> 查看</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.html import mark_safe
+from markdown import markdown
 
 from boards.models import Topic
 
@@ -77,3 +79,40 @@ class Favorite(models.Model):
         for project in projects:
             stars.append(project.project)
         return stars
+
+
+class Letter(models.Model):
+    message = models.TextField(max_length=4000)
+    topic = models.ForeignKey(Topic, related_name='+', on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, related_name='send_letters', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='receive_letters', on_delete=models.CASCADE)
+    read = models.BooleanField(default=False)
+    handle = models.BooleanField(default=False)
+    kind = models.PositiveIntegerField(default=0) # 0-入团申请 1-加入实验室申请 2-回复 3-回信
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'A ' + str(self.kind) + ' Letter from ' + self.from_user.username + ' to ' + self.to_user.username
+
+    @staticmethod
+    def get_send_letters(user):
+        send_letters = Letter.objects.filter(from_user=user).all()
+        return send_letters
+
+    @staticmethod
+    def get_receive_letters(user):
+        receive_letters = Letter.objects.filter(to_user=user).all()
+        return receive_letters
+
+    @staticmethod
+    def get_unread_receive_letters(user):
+        unread_receive_letters = Letter.objects.filter(to_user=user, read=False)
+        return unread_receive_letters
+
+    @staticmethod
+    def get_alread_receive_letters(user):
+        alread_receive_letters = Letter.objects.filter(to_user=user, read=True)
+        return alread_receive_letters
+
+    def get_message_as_markdown(self):
+        return mark_safe(markdown(self.message, safe_mode='escape'))

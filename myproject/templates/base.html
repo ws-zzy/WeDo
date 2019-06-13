@@ -30,6 +30,7 @@
         <!-- Modernizer JS -->
         <script src="{% static 'js/modernizr-2.8.3.min.js' %}"></script>    
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        {% block css %}{% endblock %}
         <!--[if lt IE 9]>
         <script src="http://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="http://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -273,7 +274,7 @@
                     <div class="row">
                         <!-- Copyright Text Area -->
                         <div class="col-md-3 m-auto text-center text-md-left order-last order-md-first">
-                            <p>Copyright &copy; V1-Bug制造有限公司</p>
+                            <p>Copywrong &copy; V1-Bug制造有限公司</p>
                         </div>
                         <!-- Copyright Text Area -->
                     </div>
