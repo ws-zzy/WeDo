@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/letter/(?P<letter_pk>\d+)/accept/$', accounts_views.accept, name='accept'), # 同意入团
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/letter/(?P<letter_pk>\d+)/allow/$', accounts_views.allow, name='allow'), # 允许退团
     url(r'^admin/', admin.site.urls),
+    url(r'password-reset/', include('password_reset.urls')),
     url(r'^search/(?P<pk>.+)/$', views.search, name='search'), #搜索内容直接加在url
     url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
