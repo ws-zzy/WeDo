@@ -163,12 +163,12 @@
                         <div class="post-meta">
                             <h2>{{ topic.subject }}</h2>
                             <div class="post-info">
-                                <a href="{{ return_url }}"><i class="fa fa-user"></i> {{ posts.first.created_by.username }}</a>
-                                <a href="#"><i class="fa fa-calendar"></i> {{ topic.last_updated|naturaltime }}</a>
+                                <a href="{{ return_url }}"><i class="fa fa-user" style="color:cornflowerblue"></i> {{ posts.first.created_by.username }}</a>
+                                <a href=javascript:void(0) class="disabled"><i class="fa fa-calendar" style="color:darkseagreen"></i> {{ topic.created_at|naturaltime }}</a>
                                 {% if star %}
-                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}"><i class="fa fa-heart"></i>已收藏</a>
+                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}"><i class="fa fa-heart" style="color:orangered"></i>已收藏</a>
                                 {% else %}
-                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}"><i class="fa fa-heart-o"></i>收藏</a>
+                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}"><i class="fa fa-heart-o" style="color:orangered"></i>收藏</a>
                                 {% endif %}
                             </div>
                         </div>
