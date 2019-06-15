@@ -4,7 +4,9 @@
 
 {% load static %}
 
+{% block top %}mt-50{% endblock %}
 
+{% block title %}Sign up{% endblock %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">功能区</a></li>
@@ -18,7 +20,7 @@
         <div class="member-area-from-wrap">
             <div class="row">
                  <!-- Register Content Start -->
-                <div class="col-lg-7 mt-30 mt-lg-0">
+                <div class="col-lg-12 mt-30 mt-lg-0">
                     <div class="login-reg-form-wrap">
                         <h2>注册</h2>
 
@@ -26,33 +28,25 @@
                             {% csrf_token %}
                             {% include 'includes/form.html' %}
 
-                            <div class="single-input-item">
-                                <div class="login-reg-form-meta">
-                                    <div class="remember-meta">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="I-am-official">
-                                            <label class="custom-control-label" for="I-am-official">我是实验室官方</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox mt-4">
-                                            <input type="checkbox" class="custom-control-input" id="I-agree">
-                                            <label class="custom-control-label" for="I-agree" onClick="read_con()">我同意服务协议
-
-                                            </label>
-                                            <a title="Quick View" class="btn btn-round btn-cart" href="#" data-toggle="modal" data-target="#quickView"><i class="fa fa-eye"></i></a>
-                                            
-                                        </div>
-
-                                    </div>
-                                </div>
+{#                            <div class="single-input-item">#}
+{#                                <div class="login-reg-form-meta">#}
+{#                                    <div class="remember-meta">#}
+{#                                        <div class="custom-control custom-checkbox">#}
+{#                                            <input type="checkbox" class="custom-control-input" id="I-am-official">#}
+{#                                            <label class="custom-control-label" for="I-am-official">我是实验室官方</label>#}
+{#                                        </div>#}
+{#                                        <div class="custom-control custom-checkbox my-3">#}
+{#                                            <input type="checkbox" class="custom-control-input" id="I-agree">#}
+                            <div class="row ml-1 mb-4">
+                                <p class="mr-4 mt-2">阅读服务协议 </p>
+                                <a title="Quick View" class="btn btn-round btn-cart" href="#" data-toggle="modal" data-target="#quickView"><i class="fa fa-file"></i></a>
                             </div>
-
-                            
-                            
-                            <!--<div>
-                                <button class="btn">阅读服务协议</button>
-                            </div>-->
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div>
-                                <button type="submit" class="btn btn-primary btn-block">注册</button>
+                                <button type="submit" class="btn btn-primary btn-block mb-4">注册（视为同意服务协议）</button>
                             </div>
                         </form>
                         <div class="card-footer text-muted text-center">

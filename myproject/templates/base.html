@@ -30,6 +30,19 @@
         <!-- Modernizer JS -->
         <script src="{% static 'js/modernizr-2.8.3.min.js' %}"></script>    
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            {% block min_height %}#wrapper {
+                min-height: 70%;
+            }
+            {% endblock %}
+            #push {
+                height: 20px;
+            }
+        </style>
         {% block css %}{% endblock %}
         <!--[if lt IE 9]>
         <script src="http://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -51,15 +64,15 @@
                                             <i class="fa fa-envelope"></i>
                                         </span>
                                         <a href="#" class="contact-text">
-                                            <strong>Email:</strong> 123456789@qq.com
+                                            <strong>Email:</strong> 2399680964@qq.com
                                         </a>
                                     </div>
                                     <div class="single-contact-info">
                                         <span class="contact-icon">
-                                            <i class="fa fa-phone"></i>
+                                            <i class="fa fa-qq"></i>
                                         </span>
                                         <a href="#" class="contact-text">
-                                            <strong>Phone:</strong> (+86) 123-456-789
+                                            <strong>QQ:</strong> 2399680964
                                         </a>
                                     </div>
                                 </div>
@@ -162,27 +175,17 @@
             </header>
             <!--== End Header Section ==-->
             
-            <div class="container">
-{#                <div class="row">#}
-{#                    <div class="col-md-2" align="center">#}
-{#                        {% block leftpart %}#}
-{#                        {% endblock %}#}
-{#                    </div>#}
-{#                    <div class="col-md-8">#}
-                        <ol class="breadcrumb my-4">
-                            {% block breadcrumb %}
-                            {% endblock %}
-                        </ol>
+            <div class="container" id="wrapper">
+                <ol class="breadcrumb my-4">
+                    {% block breadcrumb %}
+                    {% endblock %}
+                </ol>
 
-                        {% block content %}
-                        {% endblock %}
-{#                    </div>#}
-{#                    <div class="col-md-2" align="center">#}
-{#                        {% block rightpart %}#}
-{#                        {% endblock %}#}
-{#                    </div>#}
-{#                </div>#}
-
+                <div>
+                    {% block content %}
+                    {% endblock %}
+                    <div id="push"></div>
+                </div>
             </div>
         {% endblock body %}
 
@@ -200,9 +203,20 @@
                                 <div class="single-widget-item">
                                     <h3 class="widget-title">前端开发&amp;前端测试</h3>
                                     <div class="widget-body">
+{#                                        <p class="text-muted">第一轮</p>#}
+{#                                        <ul class="footer-list">#}
+{#                                            <li><a href="#">苗萌</a></li>#}
+{#                                            <li><a href="#">张沛泽</a></li>#}
+{#                                        </ul>#}
+{#                                        <p class="text-muted">第二轮</p>#}
+{#                                        <ul class="footer-list">#}
+{#                                            <li><a href="#">余宸狄</a></li>#}
+{#                                            <li><a href="#">苗萌</a></li>#}
+{#                                        </ul>#}
+                                        <p class="text-muted">第三轮</p>
                                         <ul class="footer-list">
+                                            <li><a href="#">张朝阳</a></li>
                                             <li><a href="#">苗萌</a></li>
-                                            <li><a href="#">张沛泽</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -214,9 +228,23 @@
                                 <div class="single-widget-item">
                                     <h3 class="widget-title">后端开发&amp;后端测试</h3>
                                     <div class="widget-body">
+{#                                        <p class="text-muted">第一轮</p>#}
+{#                                        <ul class="footer-list">#}
+{#                                            <li><a href="#">张进</a></li>#}
+{#                                            <li><a href="#">宋卓洋</a></li>#}
+{#                                            <li><a href="#">张朝阳</a></li>#}
+{#                                        </ul>#}
+{#                                        <p class="text-muted">第二轮</p>#}
+{#                                        <ul class="footer-list">#}
+{#                                            <li><a href="#">张朝阳</a></li>#}
+{#                                            <li><a href="#">余宸狄</a></li>#}
+{#                                        </ul>#}
+                                        <p class="text-muted">第三轮</p>
                                         <ul class="footer-list">
-                                            <li><a href="#">余宸狄</a></li>
                                             <li><a href="#">张朝阳</a></li>
+                                            <li><a href="#">苗萌</a></li>
+                                            <li><a href="#">张沛泽</a></li>
+                                            <li><a href="#">余宸狄</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -228,6 +256,7 @@
                                 <div class="single-widget-item">
                                     <h3 class="widget-title">PM</h3>
                                     <div class="widget-body">
+                                        <p class="text-muted">第三轮</p>
                                         <ul class="footer-list">
                                             <li><a href="#">魏一</a></li>
                                         </ul>
@@ -252,7 +281,7 @@
                                             </div>
                                             <div class="single-contact-info">
                                             <span class="contact-icon">
-                                                <i class="fa fa-phone"></i>
+                                                <i class="fa fa-qq"></i>
                                             </span>
                                                 <a href="mailto:your@example.com" class="contact-text">
                                                     <strong>QQ：2399680964</strong>

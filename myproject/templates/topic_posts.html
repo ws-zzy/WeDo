@@ -14,124 +14,10 @@
     <li class="breadcrumb-item active">{{ topic.subject }}</li>
 {% endblock %}
 
-{% block css %}
-{#<style>#}
-{#    .progress_btn{width: 30px; height: 30px; position: absolute;background:blue;#}
-{#        left: 0px; cursor: pointer;border:1px #ddd solid;}#}
-{#    </style>#}
-
-{% endblock %}
+{% block css %}{% endblock %}
 
 {% block content %}
-
-{#<!--== Page Content Wrapper Start ==-->#}
-{#    <div id="page-content-wrapper">#}
-{#        <div class="container">#}
-{#            <div class="single-product-page-content">#}
-{#                <div class="row">#}
-{#                    <!-- Product Thumbnail Start -->#}
-{#                    {% if topic.photo %}#}
-{#                        <div class="col-lg-5 order-last">#}
-{#                            <div class="product-thumbnail-wrap">#}
-{#                                <div class="product-thumb-gallery sticky-view">#}
-{#                                    <a href="{{ topic.photo.url }}" class="single-gallery-item">#}
-{#                                        <img src="{{ topic.photo.url }}" alt="创意图片"/>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% endif %}#}
-{#                    <!-- Product Thumbnail End -->#}
-{#    #}
-{#                    <!-- Product Details Start -->#}
-{#                    <div class="col-lg-7">#}
-{#                        <div class="product-details sidebar-active">#}
-{#                            <h2><a href="#brief">{{ topic.subject }}</a></h2>#}
-{#                            <div class="product-info-stock-sku">#}
-{#                                <a href="{{ return_url }}" class="product-stock-status text-success">{{ posts.first.created_by.username }}</a>#}
-{#                                <img src="{% static 'img/usr.png' %}" alt="头像" class="ml-3 rounded-circle w-30">#}
-{#                            </div>#}
-{##}
-{#                            {% if topic.board.name == '实验室' %}#}
-{#                                <p class="products-desc"><strong>指导教师：</strong>{{ topic.teachers }}</p>#}
-{#                                <p class="products-desc"><strong>研究方向：</strong>{{ topic.direction }}</p>#}
-{#                            {% endif %}#}
-{#                            <p class="products-desc">{{ posts.first.get_message_as_markdown }}</p>#}
-{#    #}
-{#                            <div class="product-quantity d-flex align-items-center">#}
-{#                                {% if star %}#}
-{#                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>已收藏</a>#}
-{#                                {% else %}#}
-{#                                    <a href="{% url 'favorite' topic.board.pk topic.pk %}" class="btn btn-cart-large mr-4"><i class="fa fa-heart"></i>收藏</a>#}
-{#                                {% endif %}#}
-{#                                <a href="{% url 'reply_topic' topic.board.pk topic.pk %}" class="btn btn-cart-large"><i class="fa fa-comment"></i>评论</a>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <!-- Product Details End -->#}
-{#                </div>#}
-{#                <div class="row">#}
-{#                    <div class="col-lg-12">#}
-{#                        <!-- Product Full Description Start -->#}
-{#                        <div class="product-full-info-reviews">#}
-{#                            <!-- Single Product tab Menu -->#}
-{#                            <nav class="nav" id="nav-tab">#}
-{#                                <a class="active" id="reviews-tab" data-toggle="tab" href="#reviews">评论区</a>#}
-{#                            </nav>#}
-{#                            <!-- Single Product tab Menu -->#}
-{#                            <!-- Single Product tab Content -->#}
-{#                            <div class="tab-content" id="nav-tabContent">#}
-{#                                <div class="tab-pane fade show active" id="reviews">#}
-{#                                    <div class="row">#}
-{#                                        <div class="col-lg-7">#}
-{#                                            <div class="product-ratting-wrap">#}
-{#                                                <!-- Comment Area Start -->#}
-{#                                                <div class="comment-area-wrapper">#}
-{#                                                    <div class="comments-preview-area comment-single-item">#}
-{#                                                        <h2>评论({{posts.count|add:-1}})</h2>#}
-{#                                                        {% for post in posts%}#}
-{#                                                            {% if not forloop.first %}#}
-{##}
-{#                                                                <div class="single-comment d-block d-md-flex">#}
-{#                                                                    <div class="comment-author">#}
-{#                                                                        <a href="{% url 'user_account' post.created_by.pk %}"><img src="{% static 'img/usr.png' %}" class="img-fluid" alt="头像"/></a>#}
-{#                                                                    </div>#}
-{#                                                                    <div class="comment-info mt-3 mt-md-0">#}
-{#                                                                        <div class="comment-info-top d-flex flex-row">#}
-{#                                                                            <h3 style="width: 150px;"><a href="{% url 'user_account' post.created_by.pk %}">{{ post.created_by.username }}</a></h3>#}
-{#                                                                            {% if post.created_by == user %}#}
-{#                                                                                <a style="width: 150px;" href="{% url 'edit_post' post.topic.board.pk post.topic.pk post.pk %}"#}
-{#                                                                                   class="btn-reply" role="button"><i class="fa fa-reply"></i>编辑</a>#}
-{#                                                                                {% else %}#}
-{#                                                                                <p style="width: 150px;"></p>#}
-{#                                                                            {% endif %}#}
-{#                                                                            <a style="width: 150px;" href="#" class="btn-reply" role="button"><i class="fa fa-reply"></i>回复</a>#}
-{#                                                                        </div>#}
-{#                                                                        <a class="comment-date">{{ post.updated_at }}</a>#}
-{#                                                                        <p>{{ post.get_message_as_markdown }}</p>#}
-{#                                                                    </div>#}
-{#                                                                </div>#}
-{#                                                            {% endif %}#}
-{#                                                        {% endfor %}#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <!-- Single Product tab Content -->#}
-{#                        </div>#}
-{#                        <!-- Product Full Description End -->#}
-{#                    </div>#}
-{#                </div>            #}
-{#                <!-- Single Product tab Content -->#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{##}
-{#    {% include 'includes/pagination.html' %}#}
-    <!--== Start Header Section ==-->
+<!--== Start Header Section ==-->
 <header id="header-area">
 {% if topic.board.name == '个人创意' and topic.state >= 1 %}
 <h2 class="sidebar-title my-4"><i class="fa fa-wrench"></i> 项目开发中</h2>
@@ -196,6 +82,8 @@
                                 <button class="btn btn-cart-large my-4" onclick="show_info()"><i class="fa fa-mouse-pointer"></i>点我开团</button>
                             {% elif button == 3 %}
                                 <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>退出开发团队</a>
+                            {% elif button == 4 %}
+                                <button class="btn btn-cart-large my-4" onclick="show_info()"><i class="fa fa-mouse-pointer"></i>退出开发团队</button>
                             {% endif %}
 
                             {% if topic.board.name == '个人创意' %}
@@ -355,46 +243,4 @@
         <strong>您已发送过申请!</strong> 请耐心等待楼主答复。</div>'
     }
 </script>
-{#<script>#}
-{#$(function(){#}
-{#    var tag = false,ox = 0,left = 0,bgleft = 0;#}
-{#    $('.progress_btn').mousedown(function(e) {#}
-{#        ox = e.pageX - left;#}
-{#        tag = true;#}
-{#    });#}
-{##}
-{#    $(document).mouseup(function() {#}
-{#        tag = false;#}
-{#    });#}
-{##}
-{#    $('.progress').mousemove(function(e) {//鼠标移动#}
-{#        if (tag) {#}
-{#             left = e.pageX - ox;#}
-{#             if (left <= 0) {#}
-{#                left = 0;#}
-{#             }else if (left > 300) {#}
-{#                left = 300;#}
-{#             }#}
-{#            $('.progress_btn').css('left', left);#}
-{#            $('.progress-bar').width(left/300 + '%');#}
-{#            $('.text').html(parseInt((left/300)*100) + '%');#}
-{#        }#}
-{#    });#}
-{##}
-{#    $('.progress_bg').click(function(e) {//鼠标点击#}
-{#         if (!tag) {#}
-{#             bgleft = $('.progress_bg').offset().left;#}
-{#             left = e.pageX - bgleft;#}
-{#             if (left <= 0) {#}
-{#                 left = 0;#}
-{#            }else if (left > 300) {#}
-{#                 left = 300;#}
-{#            }#}
-{#            $('.progress_btn').css('left', left);#}
-{#            $('.progress-bar').animate({width:left/300 + '%'},300);#}
-{#            $('.text').html(parseInt((left/300)*100) + '%');#}
-{#         }#}
-{#    });#}
-{#});#}
-{#</script>#}
 {% endblock %}

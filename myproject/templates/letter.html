@@ -3,8 +3,9 @@
 {% load static %}
 
 {% block css %}
-
 {% endblock %}
+
+{% block title %}Letter box{% endblock %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'user_account' user.pk %}">我的账户</a></li>
@@ -65,18 +66,18 @@
                                         <a href="{% url 'acceptgiveup' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
                                         <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
                                     {% else %}
-                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="btn btn-primary">返回</a>
                                     {% endif %}
                                 {% elif letter.kind == 12 %}
                                     {% if letter.to_user.username == 'admin' %}
 {#                                        <a href="#" class="btn btn-primary mr-3">同意</a>#}
 {#                                        <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>#}
-                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="btn btn-primary">返回</a>
                                     {% else %}
-                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="btn btn-primary">返回</a>
                                     {% endif %}
                                 {% else %}
-                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="btn btn-primary">返回</a>
                                 {% endif %}
 
                             </div>
