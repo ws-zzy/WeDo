@@ -61,8 +61,9 @@
                             {% if is_self %}
                             <div class="col-6">
 {#                                <button type="button" class="btn btn-primary" id="mail-rev" data-toggle="modal" data-target="#mail-mod">修改</button>#}
-                                <a href="#" style="width: 100px;" role="button" data-toggle="modal" data-target="#mail-mod"><i class="fa fa-pencil"></i> 修改</a>
+                                <a href='{% url "password_reset_recover" %}' style="width: 100px;" role="button" data-toggle="modal" data-target="#mail-mod"><i class="fa fa-pencil"></i> 修改</a>
                             </div>
+                            <!--a href='{% url "password_reset_recover" %}'>重置密码</a-->
                             {% endif %}
                         </div>
                     </li>
@@ -89,8 +90,8 @@
                             </div>
                             {% if is_self %}
                             <div class="col-6">
-{#                                <button type="button" class="btn btn-primary" id="pwd-rev" data-toggle="modal" data-target="#pwd-mod">修改</button>#}
-                                <a style="width: 100px;" href={% url 'password_change' %} role="button"><i class="fa fa-pencil"></i> 修改</a>
+{#                                <button type="button" class="btn btn-primary" id="pwd-rev" >修改</button>#}
+                                <a style="width: 100px;" href='{% url "password_reset_recover" %}'role="button"><i class="fa fa-pencil"></i> 修改</a>
                             </div>
                             {% endif %}
                         </div>
@@ -169,8 +170,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">修改邮箱</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" >&times;</button type="button" class="close" data-dismiss="modal">
             </div>
+
             <form name="mail-form" method="post">
                 {% csrf_token %}
                 <div class="modal-body">

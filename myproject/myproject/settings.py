@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 
     'widget_tweaks',
     'notifications',
-
+    'password_reset',
     'accounts',
     'boards',
 ]
@@ -138,5 +138,19 @@ MEDIA_URL = '/media/'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # AUTH_USER_MODEL = 'myapp.MyUser'
+
+
+# SMTP服务器，改为你的邮箱的smtp!
+EMAIL_HOST = 'smtp.buaa.edu.cn'
+# 改为你自己的邮箱名！
+EMAIL_HOST_USER = 'cuna1997@buaa.edu.cn'
+# 你的邮箱密码
+EMAIL_HOST_PASSWORD = '12345^&*()asd'
+# 发送邮件的端口
+EMAIL_PORT = 25
+# 是否使用 TLS
+EMAIL_USE_TLS = True
+# 默认的发件人
+DEFAULT_FROM_EMAIL = 'cuna1997@buaa.edu.cn'
