@@ -31,13 +31,14 @@ def my_account(request):
 
 @login_required
 def follow(request, user_pk):
-    user = get_object_or_404(User, pk=request.user.pk)
-    followed_user = get_object_or_404(User, pk=user_pk)
-    if Follow.is_followed(user, followed_user):
-        Follow.unfollow(user, followed_user)
-    else:
-        Follow.follow(user, followed_user)
     user_url = reverse('user_account', kwargs={'user_pk': user_pk})
+    if not request.user.pk == user_pk: # 不能关注自己
+        user = get_object_or_404(User, pk=request.user.pk)
+        followed_user = get_object_or_404(User, pk=user_pk)
+        if Follow.is_followed(user, followed_user):
+            Follow.unfollow(user, followed_user)
+        else:
+            Follow.follow(user, followed_user)
     return redirect(user_url)
 
 
@@ -92,6 +93,11 @@ class UserListView(ListView):
 
 @login_required
 def letter(request, user_pk):
+    if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk': search_content})
+            return redirect(url)
     send_letters = Letter.get_send_letters(request.user)
     u_r_letters = Letter.get_unread_receive_letters(request.user)
     a_r_letters = Letter.get_alread_receive_letters(request.user)
@@ -103,39 +109,63 @@ def letter(request, user_pk):
 @login_required
 def letter_read(request, user_pk, letter_pk):
     letter = Letter.objects.get(pk=letter_pk)
-    letter.read = True
-    letter.save()
+    if request.user.pk == letter.to_user.pk: # 只有收信人可以标记已读
+        letter.read = True
+        letter.save()
     return redirect(reverse('letter', kwargs={'user_pk': user_pk}))
 
 
 @login_required
 def letter_handle(request, user_pk, letter_pk):
     letter = Letter.objects.get(pk=letter_pk)
-    letter.read = True
-    letter.handle = True
-    letter.save()
+    if request.user.pk == letter.to_user.pk: # 只有收信人可以标记已处理
+        letter.read = True
+        letter.handle = True
+        letter.save()
     return redirect(reverse('letter', kwargs={'user_pk': user_pk}))
 
 
 @login_required
 def accept(request, pk, topic_pk, letter_pk):
+    topic = Topic.objects.get(pk=topic_pk)
     from_user = Letter.objects.get(pk=letter_pk).from_user
     to_user = Letter.objects.get(pk=letter_pk).to_user
-    letter = Letter.objects.get(pk=letter_pk)
-    letter.handle = True
-    letter.read = True
-    letter.save()
-    Delegation.delegate(Topic.objects.get(pk=topic_pk), from_user)
+    if request.user.pk == topic.starter.pk: # 只有项目发起人可以同意加入项目
+        letter = Letter.objects.get(pk=letter_pk)
+        letter.handle = True
+        letter.read = True
+        letter.save()
+        Delegation.delegate(topic, from_user)
     return redirect(reverse('letter', kwargs={'user_pk': to_user.pk}))
 
 
 @login_required
 def allow(request, pk, topic_pk, letter_pk):
+    topic = Topic.objects.get(pk=topic_pk)
     from_user = Letter.objects.get(pk=letter_pk).from_user
     to_user = Letter.objects.get(pk=letter_pk).to_user
-    letter = Letter.objects.get(pk=letter_pk)
-    letter.handle = True
-    letter.read = True
-    letter.save()
-    Delegation.undelegate(Topic.objects.get(pk=topic_pk), from_user)
+    if request.user.pk == topic.starter.pk:  # 只有项目发起人可以同意离开项目
+        letter = Letter.objects.get(pk=letter_pk)
+        letter.handle = True
+        letter.read = True
+        letter.save()
+        Delegation.undelegate(topic, from_user)
+    return redirect(reverse('letter', kwargs={'user_pk': to_user.pk}))
+
+
+@login_required
+def acceptgiveup(request, pk, topic_pk, letter_pk):
+    topic = Topic.objects.get(pk=topic_pk)
+    # from_user = Letter.objects.get(pk=letter_pk).from_user
+    to_user = Letter.objects.get(pk=letter_pk).to_user
+    if request.user.username == 'admin': # 只有admin可以同意解散团队请求
+        letter = Letter.objects.get(pk=letter_pk)
+        letter.handle = True
+        letter.read = True
+        letter.save()
+        team = topic.staffs.all()
+        for member in team:
+            Delegation.undelegate(topic, member)
+        topic.state = 4
+        topic.save()
     return redirect(reverse('letter', kwargs={'user_pk': to_user.pk}))

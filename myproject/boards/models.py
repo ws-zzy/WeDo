@@ -33,6 +33,8 @@ class Topic(models.Model):
     staff = models.PositiveIntegerField(null=True, default=0)  # 创意、实验室：当前团队人数
     teachers = models.CharField(null=True, max_length=50)  # 实验室：教师名单
     staffs = models.ManyToManyField(User, related_name='joins', through='Delegation')
+    state = models.PositiveIntegerField(null=True, default=0)  #  创意项目状态 0：组队 1：开发 2：审核 3：发布 4：失败
+    percent = models.PositiveIntegerField(null=True, default=0) # 创意开发进度（百分比）
     #TODO 技术博客源代码上传?
 
     def __str__(self):

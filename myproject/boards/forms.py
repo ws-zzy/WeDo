@@ -98,6 +98,7 @@ class NewJoinForm(forms.Form):
         help_text='最多输入500字符。'
     )
 
+
 class NewQuitForm(forms.Form):
     退出原因 = forms.CharField(
         required=True,
@@ -108,3 +109,23 @@ class NewQuitForm(forms.Form):
         help_text='最多输入1000字符。'
     )
 
+
+class NewGiveupForm(forms.Form):
+    放弃原因 = forms.CharField(
+        required=True,
+        widget=forms.Textarea(
+            attrs={'rows': 5, 'placeholder': '请描述你想要停止本项目/实验室的原因。'}
+        ),
+        max_length=1000,
+        help_text='最多输入1000字符。'
+    )
+
+class NewSubmitForm(forms.Form):
+    留言 = forms.CharField(
+        required=True,
+        widget=forms.Textarea(
+            attrs={'rows': 5, 'placeholder': '请简要描述项目，方便管理员审核。'}
+        ),
+        max_length=1000,
+        help_text='最多输入1000字符。'
+    )

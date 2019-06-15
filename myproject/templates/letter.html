@@ -32,7 +32,7 @@
                     <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                     <div class="media-body text-center">
                         <p data-toggle="modal" data-target="#unread-{{ letter.pk }}">
-                            <h3>#{{ letter.topic.subject }}--来自  {{ letter.from_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% endif %}</h3>
+                            <h3>#{{ letter.topic.subject }}--来自  {{ letter.from_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% elif letter.kind == 10 %}团队解散通知{% elif letter.kind == 11 %}实验室关闭通知{% elif letter.kind == 12 %}项目递交审核通知{% endif %}</h3>
                         </p>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unread-{{ letter.pk }}">
                             <i class="fa fa-envelope-open"></i> 查看</button>
@@ -46,7 +46,7 @@
                                 <h3 class="modal-title">
                                     发件人： {{ letter.from_user.username }}<br>
                                     时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp间： {{ letter.created_at }}<br>
-                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% endif %}
+                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% elif letter.kind == 10 %}团队解散通知{% elif letter.kind == 11 %}实验室关闭通知{% elif letter.kind == 12 %}项目递交审核通知{% endif %}
                                 </h3>
                                 <a href="{% url 'letter_read' letter.to_user.pk letter.pk %}" class="close">&times;</a>
                             </div>
@@ -56,10 +56,29 @@
                             <div class="modal-footer">
                                 {% if letter.kind == 0 or letter.kind == 1 %}
                                     <a href="{% url 'accept' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                    <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
                                 {% elif letter.kind == 4 or letter.kind == 5 %}
                                     <a href="{% url 'allow' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                    <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+                                {% elif letter.kind == 10 or letter.kind == 11 %}
+                                    {% if letter.to_user.username == 'admin'%}
+                                        <a href="{% url 'acceptgiveup' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                        <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+                                    {% else %}
+                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                    {% endif %}
+                                {% elif letter.kind == 12 %}
+                                    {% if letter.to_user.username == 'admin' %}
+{#                                        <a href="#" class="btn btn-primary mr-3">同意</a>#}
+{#                                        <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>#}
+                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                    {% else %}
+                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                    {% endif %}
+                                {% else %}
+                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
                                 {% endif %}
-                                <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+
                             </div>
                         </div>
                     </div>
@@ -71,7 +90,7 @@
                     <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                     <div class="media-body text-center">
                         <p data-toggle="modal" data-target="#alread-{{ letter.pk }}">
-                            <h3>#{{ letter.topic.subject }}--来自  {{ letter.from_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% endif %}</h3>
+                            <h3>#{{ letter.topic.subject }}--来自  {{ letter.from_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% elif letter.kind == 10 %}团队解散通知{% elif letter.kind == 11 %}实验室关闭通知{% elif letter.kind == 12 %}项目递交审核通知{% endif %}</h3>
                         </p>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alread-{{ letter.pk }}">
                             <i class="fa fa-envelope-open"></i> 查看</button>
@@ -85,7 +104,7 @@
                                 <h3 class="modal-title">
                                     发件人： {{ letter.from_user.username }}<br>
                                     时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp间： {{ letter.created_at }}<br>
-                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% endif %}
+                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% elif letter.kind == 10 %}团队解散通知{% elif letter.kind == 11 %}实验室关闭通知{% elif letter.kind == 12 %}项目递交审核通知{% endif %}
                                 </h3>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
@@ -96,10 +115,30 @@
                                 {% if not letter.handle %}
                                     {% if letter.kind == 0 or letter.kind == 1 %}
                                         <a href="{% url 'accept' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                        <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
                                     {% elif letter.kind == 4 or letter.kind == 5 %}
                                         <a href="{% url 'allow' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                        <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+                                    {% elif letter.kind == 10 or letter.kind == 11 %}
+                                        {% if letter.to_user.username == 'admin' %}
+                                            <a href="{% url 'acceptgiveup' letter.topic.board.pk letter.topic.pk letter.pk %}" class="btn btn-primary mr-3">同意</a>
+                                            <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+                                        {% else %}
+                                            <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        {% endif %}
+                                    {% elif letter.kind == 12 %}
+                                        {% if letter.to_user.username == 'admin' %}
+{#                                            <a href="#" class="btn btn-primary mr-3">同意</a>#}
+{#                                            <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>#}
+                                            <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        {% else %}
+                                            <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
                                     {% endif %}
-                                    <a href="{% url 'letter_handle' letter.to_user.pk letter.pk %}" class="btn btn-primary">拒绝</a>
+                                {% else %}
+                                    <a href="#" class="btn btn-primary" data-dismiss="modal">返回</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -126,7 +165,7 @@
                     <img src={% static "img/bulb.jpg"%} alt="创意图片" class="mr-3 mt-3 rounded-circle big-icon">
                     <div class="media-body text-center">
                         <p data-toggle="modal" data-target="#send-{{ letter.pk }}">
-                        <h3>#{{ letter.topic.subject }}--发给  {{ letter.to_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% endif %}</h3>
+                        <h3>#{{ letter.topic.subject }}--发给  {{ letter.to_user.username }}  的  {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% elif letter.kind == 10 %}团队解散通知{% elif letter.kind == 11 %}实验室关闭通知{% elif letter.kind == 12 %}项目递交审核通知{% endif %}</h3>
                         </p>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#send-{{ letter.pk }}">
                             <i class="fa fa-envelope-open"></i> 查看</button>
@@ -140,7 +179,7 @@
                                 <h3 class="modal-title">
                                     收件人： {{ letter.to_user.username }}<br>
                                     时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp间： {{ letter.created_at }}<br>
-                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% endif %}
+                                    主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp题： {% if letter.kind == 0 %}开团申请{% elif letter.kind == 1 %}加入实验室申请{% elif letter.kind == 2 %}回复通知{% elif letter.kind == 3%}回信{% elif letter.kind == 4%}退团申请{% elif letter.kind == 5%}退出实验室申请{% elif letter.kind == 10 %}团队解散通知{% elif letter.kind == 11 %}实验室关闭通知{% elif letter.kind == 12 %}项目递交审核通知{% endif %}
                                 </h3>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>

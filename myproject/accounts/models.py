@@ -88,7 +88,7 @@ class Letter(models.Model):
     to_user = models.ForeignKey(User, related_name='receive_letters', on_delete=models.CASCADE)
     read = models.BooleanField(default=False)
     handle = models.BooleanField(default=False)
-    kind = models.PositiveIntegerField(default=0) # 0-入团申请 1-加入实验室申请 2-回复通知 3-回信 4-退团申请 5-退出实验室申请
+    kind = models.PositiveIntegerField(default=0) # 0-入团申请 1-加入实验室申请 2-回复通知 3-回信 4-退团申请 5-退出实验室申请 10-解散项目团队 11-解散实验室 12-提交项目审核
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -48,12 +48,17 @@ urlpatterns = [
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/favor/$', views.favorite, name='favorite'),
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
-    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/join/$', views.join, name='join'),
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/join/$', views.join, name='join'), # join 和 quit 写在同一个视图中
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/changestate/$', views.changestate, name='changestate'),
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/changepercent/(?P<percent>\d+)/$', views.changepercent, name='changepercent'),
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/giveup/$', views.giveup, name='giveup'),
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/submit/$', views.submit, name='submit'),
     # url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/quit/$', views.quit, name='quit'),
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post'),
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/letter/(?P<letter_pk>\d+)/accept/$', accounts_views.accept, name='accept'), # 同意入团
     url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/letter/(?P<letter_pk>\d+)/allow/$', accounts_views.allow, name='allow'), # 允许退团
+    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/letter/(?P<letter_pk>\d+)/acceptgiveup/$', accounts_views.acceptgiveup, name='acceptgiveup'), # 允许解散
     url(r'^admin/', admin.site.urls),
     url(r'^search/(?P<pk>.+)/$', views.search, name='search'), #搜索内容直接加在url
     url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),

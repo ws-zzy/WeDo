@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.contrib import messages
 
-from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm, NewJoinForm, NewQuitForm
+from .forms import NewTopicForm, PostForm, NewLabForm, NewBlogForm, NewOverflowForm, NewJoinForm, NewQuitForm, NewGiveupForm, NewSubmitForm
 from .models import Board, Post, Topic, Delegation
 from accounts.models import Favorite, Letter
 from sensitive import DFAFilter
@@ -35,9 +35,16 @@ def search(request, pk):
     topic_out = list()
     topic_set = Topic.objects.all()
     show_list = list()
+    if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk':search_content})
+            return redirect(url)
     for topic in topic_set:
         ratio_subject = fuzz.partial_ratio(pk, topic.subject)
-        ratio_describe = fuzz.partial_ratio(pk, topic.posts.all()[0].message)
+        ratio_describe = 0
+        if topic.posts.all():
+            ratio_describe = fuzz.partial_ratio(pk, topic.posts.all()[0].message)
         ratio = ratio_subject + 0.7 * ratio_describe
         if ratio > 40:
             topic_out.append((topic, ratio))
@@ -80,6 +87,7 @@ class PostListView(ListView):
     context_object_name = 'posts'
     template_name = 'topic_posts.html'
     paginate_by = 20
+    # self_topic = Topic.objects.get(pk=0)
 
     def get_context_data(self, **kwargs):
         session_key = 'viewed_topic_{}'.format(self.topic.pk)
@@ -89,12 +97,36 @@ class PostListView(ListView):
             self.request.session[session_key] = True
         kwargs['topic'] = self.topic
         kwargs['star'] = False
+        kwargs['is_self'] = False
         # if self.topic.starter.pk == self.user.pk:   #<-- from here
         #     kwargs['return_url'] = reverse('my_account')
         # else:
         kwargs['return_url'] = reverse('user_account', kwargs={'user_pk': self.topic.starter.pk})   #<--to here
         kwargs['staffs'] = self.topic.staffs.all()
-        kwargs['button'] = 0 # 未登录：0，未发信：1，已发信：2，已同意：3
+        kwargs['percent_blue'] = '0%'; kwargs['percent_green'] = '0%'; kwargs['percent_yellow'] = '0%'; kwargs['percent_red'] = '0%'
+        if self.topic.state == 1:
+            percent = self.topic.percent
+            if percent <= 25:
+                kwargs['percent_blue'] = str(percent) + '%'
+            elif percent > 25 and percent <= 50:
+                kwargs['percent_blue'] = '25%'
+                kwargs['percent_green'] = str(percent - 25) + '%'
+            elif percent > 50 and percent <= 75:
+                kwargs['percent_blue'] = '25%'
+                kwargs['percent_green'] = '25%'
+                kwargs['percent_yellow'] = str(percent - 50) + '%'
+            elif percent > 75 and percent <= 100:
+                kwargs['percent_blue'] = '25%'
+                kwargs['percent_green'] = '25%'
+                kwargs['percent_yellow'] = '25%'
+                kwargs['percent_red'] = str(percent - 75) + '%'
+            else:
+                kwargs['percent_blue'] = '25%'
+                kwargs['percent_green'] = '25%'
+                kwargs['percent_yellow'] = '25%'
+                kwargs['percent_red'] = '25%'
+        kwargs['button'] = 0 # 未登录：0，加入未发信：1，加入已发信：2，退出未发信：3，退出已发信：4
+        kwargs['ok'] = 0 # 未登录或不是发起者：0，有未处理信件：1，无未处理信件：2，项目开始开发但未完成：3，项目开发完成：4，项目已交付审核：5，不显示
         if self.request.user.is_authenticated():
             # print(self.user)
             # print(type(self.user))
@@ -106,19 +138,59 @@ class PostListView(ListView):
                 if not Delegation.is_delegation(self.topic, self.user):
                     letter_list = list()
                     if self.topic.board.name == '个人创意':
-                        letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter, topic=self.topic, kind=0)
+                        letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter, topic=self.topic, kind=0).all()
                     elif self.topic.board.name == '实验室':
                         letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter,
-                                                            topic=self.topic, kind=1)
+                                                            topic=self.topic, kind=1).all()
                     flag = True
                     for letter in letter_list:
                         if not letter.handle:
                             flag = False
+                            break
                     if not flag: # 有未处理的信件
                         kwargs['button'] = 2
                 elif Delegation.is_delegation(self.topic, self.user):
                     kwargs['button'] = 3
+                    letter_list = list()
+                    if self.topic.board.name == '个人创意':
+                        letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter,
+                                                            topic=self.topic, kind=4).all() # 退团信
+                    elif self.topic.board.name == '实验室':
+                        letter_list = Letter.objects.filter(from_user=self.user, to_user=self.topic.starter,
+                                                            topic=self.topic, kind=5).all() # 退实验室信
+                    flag = True
+                    for letter in letter_list:
+                        if not letter.handle:
+                            flag = False
+                            break
+                    if not flag:  # 有未处理的信件
+                        kwargs['button'] = 4
+
+            else:
+                kwargs['is_self'] = True
+                if self.topic.state == 1:
+                    if self.topic.percent < 100: # 开发未完成
+                        kwargs['ok'] = 3
+                    else: # 开发完成
+                        kwargs['ok'] = 4
+                elif self.topic.state == 2:
+                    kwargs['ok'] = 5
+                elif self.topic.state == 0:
+                    kwargs['ok'] = 2
+                    letter_list = list()
+                    if self.topic.board.name == '个人创意':
+                        letter_list = Letter.objects.filter(to_user=self.user, topic=self.topic, kind=0).all()
+                    elif self.topic.board.name == '实验室':
+                        letter_list = Letter.objects.filter(to_user=self.user, topic=self.topic, kind=1).all()
+                    flag = True
+                    for letter in letter_list:
+                        if not letter.handle:
+                            flag = False
+                            break
+                    if not flag:  # 有未处理的信件
+                        kwargs['ok'] = 1
             kwargs['star'] = Favorite.is_star(self.user, self.topic)
+
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
@@ -129,6 +201,9 @@ class PostListView(ListView):
         return queryset
 
     def post(self, request, *args, **kwargs):
+        # if 'percent_submit' in request.POST:
+        #     url = reverse('changepercent', self.topic.board.pk, self.topic.pk, request.POST['percent_input'])
+        #     return redirect(url)
         if 'search_submit' in request.POST:
             search_content = request.POST['search_input']
             url = reverse('search', kwargs={'pk':search_content})
@@ -155,13 +230,6 @@ def new_topic(request, pk):
             search_content = request.POST['search_input']
             url = reverse('search', kwargs={'pk':search_content})
             return redirect(url)
-
-        # if 'subject' in request.POST:
-        #     subject_clean = DFAFilter.filter(request.POST['subject'])
-        # if 'teachers' in request.POST:
-        #     subject_clean = DFAFilter.filter(request.POST['teachers'])
-        # if 'direction' in request.POST:
-        #     subject_clean = DFAFilter.filter(request.POST['direction'])
 
         if board.name == '个人创意':
             form = NewTopicForm(request.POST, request.FILES)
@@ -238,8 +306,11 @@ def reply_topic(request, pk, topic_pk):
 
 @login_required
 def join(request, pk, topic_pk):
+    topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
     joined = Delegation.is_delegation(topic, request.user)
+    if request.user.pk == topic.starter.pk: # 项目发起者不能申请
+        return redirect(topic_url)
     if request.method == 'POST':
         if 'search_submit' in request.POST:
             search_content = request.POST['search_input']
@@ -264,7 +335,6 @@ def join(request, pk, topic_pk):
                                          '加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
                                      '\r\n\r\n希望能得到你的同意！'
                     letter.save()
-                topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
                 return redirect(topic_url)
         else:
             form = NewQuitForm(request.POST)
@@ -281,7 +351,6 @@ def join(request, pk, topic_pk):
                     letter.message = '尊敬的 ***' + topic.starter.username + '*** 同学你好，我想要退出 ***' + topic.subject + '*** 实验室。\r\n\r\n' + \
                                      '***我退出的原因是***：\r\n\r\n' + form.cleaned_data.get('退出原因') + '\r\n\r\n希望能得到你的同意！'
                     letter.save()
-                topic_url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
                 return redirect(topic_url)
 
     else:
@@ -305,11 +374,6 @@ class PostUpdateView(UpdateView):
         return queryset.filter(created_by=self.request.user)
 
     def form_valid(self, form):
-        # if 'search_submit' in form:
-        #     print('in form')
-        #     search_content = form['search_input']
-        #     url = reverse('search', kwargs={'pk': search_content})
-        #     return redirect(url)
         post = form.save(commit=False)
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
@@ -326,4 +390,123 @@ class PostUpdateView(UpdateView):
         # print(dir(super(PostUpdateView, self).post()))
 
         return super(PostUpdateView, self).post(self, request, *args, **kwargs)
+
+@login_required
+def changestate(request, pk, topic_pk):
+    url = reverse('topic_posts', kwargs={'pk':pk, 'topic_pk':topic_pk})
+    topic = Topic.objects.get(pk=topic_pk)
+    if request.user.pk == topic.starter.pk and topic.state == 0: # 只有项目发起者可以改变状态，只有状态为0时可以改变状态
+        topic.state += 1
+        topic.save()
+    return redirect(url)
+
+@login_required
+def changepercent(request, pk, topic_pk, percent):
+    url = reverse('topic_posts', kwargs={'pk':pk, 'topic_pk':topic_pk})
+    topic = Topic.objects.get(pk=topic_pk)
+    if request.user.pk == topic.starter.pk and topic.state == 1: # 只有项目发起者可以改变进度，只有状态为1时可以改变进度
+        if percent == '0':
+            if topic.percent >= 5:
+                topic.percent -= 5
+                topic.save()
+        elif percent == '1':
+            if topic.percent <= 95:
+                topic.percent += 5
+                topic.save()
+    print(topic.percent)
+    return redirect(url)
+
+@login_required
+def giveup(request, pk, topic_pk):
+    url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
+    # print(url)
+    topic = Topic.objects.get(pk=topic_pk)
+    if not request.user.pk == topic.starter.pk: # 非项目发起者不能申请
+        return redirect(url)
+    if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk': search_content})
+            return redirect(url)
+        form = NewGiveupForm(request.POST)
+        if form.is_valid():
+            if topic.board.name == '个人创意':
+                team = topic.staffs.all()
+                # 发给所有团队成员
+                for member in team:
+                    if not member.pk == topic.starter.pk: # 不用发给自己
+                        letter = Letter.objects.create(from_user=request.user, to_user=member, kind=10, topic=topic,
+                                                   read=False, handle=False)
+                        letter.message = '亲爱的 ***' + member.username + '*** 你好。\r\n\r\n很遗憾，我们的 ***' + topic.subject + \
+                                     '*** 项目无法再进行下去了。\r\n\r\n***原因如下***：\r\n\r\n' + form.cleaned_data.get(
+                        '放弃原因') + '\r\n\r\n感谢你一直以来的付出，我们后会有期。'
+                        letter.save()
+                # 发给管理员
+                letter = Letter.objects.create(from_user=request.user, to_user=User.objects.get(username='admin'), kind=10,
+                                               topic=topic,
+                                               read=False, handle=False)
+                letter.message = '***' + topic.subject + \
+                                 '*** 项目的管理员发起了解散团队请求。\r\n\r\n***原因如下***：\r\n\r\n' + form.cleaned_data.get('放弃原因')
+                letter.save()
+            elif topic.board.name == '实验室':
+                team = topic.staffs.all()
+                for member in team:
+                    if not member.pk == topic.starter.pk:  # 不用发给自己
+                        letter = Letter.objects.create(from_user=request.user, to_user=member, kind=11, topic=topic,
+                                                   read=False, handle=False)
+                        letter.message = '尊敬的 ***' + member.username + '*** 同学你好。\r\n\r\n很遗憾，我们的 ***' + topic.subject + \
+                                     '*** 实验室不再继续开放。\r\n\r\n***原因如下***：' + form.cleaned_data.get(
+                        '放弃原因') + '\r\n\r\n感谢你一直以来的付出，愿你前程似锦。'
+                        letter.save()
+                # 发给管理员
+                letter = Letter.objects.create(from_user=request.user, to_user=User.objects.get(username='admin'), kind=11,
+                                               topic=topic,
+                                               read=False, handle=False)
+                letter.message = '***' + topic.subject + \
+                                 '*** 项目的管理员发起了关闭实验室请求。\r\n\r\n***原因如下***：\r\n\r\n' + form.cleaned_data.get('放弃原因')
+                letter.save()
+            return redirect(url)
+    else:
+        form = NewGiveupForm()
+    print(url)
+    return render(request, 'join.html', {'topic': topic, 'form': form} )
+
+@login_required
+def submit(request, pk, topic_pk):
+    url = reverse('topic_posts', kwargs={'pk': pk, 'topic_pk': topic_pk})
+    topic = Topic.objects.get(pk=topic_pk)
+    if not request.user.pk == topic.starter.pk: # 非项目发起者不能申请
+        return redirect(url)
+    if request.method == 'POST':
+        if 'search_submit' in request.POST:
+            search_content = request.POST['search_input']
+            url = reverse('search', kwargs={'pk': search_content})
+            return redirect(url)
+        form = NewSubmitForm(request.POST)
+        if form.is_valid():
+            if topic.board.name == '个人创意':
+                team = topic.staffs.all()
+                # 发给所有团队成员
+                for member in team:
+                    if not member.pk == topic.starter.pk:  # 不用发给自己
+                        letter = Letter.objects.create(from_user=request.user, to_user=member, kind=12, topic=topic,
+                                                   read=False, handle=False)
+                        letter.message = '亲爱的 ***' + member.username + '*** 你好。\r\n\r\n我们的 ***' + topic.subject + \
+                                     '*** 项目已经开发完成，正在交付审核！\r\n\r\n感谢你一直以来的付出！'
+                        letter.save()
+                # 发给管理员
+                letter = Letter.objects.create(from_user=request.user, to_user=User.objects.get(username='admin'), kind=12,
+                                               topic=topic,
+                                               read=False, handle=False)
+                letter.message = '***' + topic.subject + \
+                                 '*** 项目的管理员发起了审核请求。\r\n\r\n***留言***：\r\n\r\n' + form.cleaned_data.get('留言')
+                letter.save()
+            return redirect(url)
+    else:
+        form = NewSubmitForm()
+    return render(request, 'join.html', {'topic': topic, 'form':form} )
+
+
+
+
 

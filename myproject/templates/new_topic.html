@@ -25,6 +25,6 @@
     <form method="post" enctype="multipart/form-data" novalidate> <!--multipart/form-data:不对字符编码,在使用包含文件上传控件的表单时，必须使用该值。-->
         {% csrf_token %}
         {% include 'includes/form.html' %}
-        <button type="submit" class="btn btn-success">发布</button>
+        <button type="submit" class="btn btn-success my-4">发布</button>
     </form>
 {% endblock %}

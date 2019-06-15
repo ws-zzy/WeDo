@@ -14,6 +14,14 @@
     <li class="breadcrumb-item active">{{ topic.subject }}</li>
 {% endblock %}
 
+{% block css %}
+{#<style>#}
+{#    .progress_btn{width: 30px; height: 30px; position: absolute;background:blue;#}
+{#        left: 0px; cursor: pointer;border:1px #ddd solid;}#}
+{#    </style>#}
+
+{% endblock %}
+
 {% block content %}
 
 {#<!--== Page Content Wrapper Start ==-->#}
@@ -125,7 +133,37 @@
 {#    {% include 'includes/pagination.html' %}#}
     <!--== Start Header Section ==-->
 <header id="header-area">
-
+{% if topic.board.name == '个人创意' and topic.state >= 1 %}
+<h2 class="sidebar-title my-4"><i class="fa fa-wrench"></i> 项目开发中</h2>
+<div class="container">
+    <div class="progress progress_bar" style="height:20px;">
+        <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" style="width:{{ percent_blue }}">
+{#            刚刚起步#}
+        </div>
+        {% if topic.percent > 25 %}
+            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width:{{ percent_green }}">
+{#                渐入佳境#}
+            </div>
+            {% if topic.percent > 50 %}
+                <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" style="width:{{ percent_yellow }}">
+{#                    披荆斩棘#}
+                </div>
+                {% if topic.percent > 75 %}
+                    <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:{{ percent_red }}">
+{#                        最后冲刺#}
+                    </div>
+        {% endif %}{% endif %}{% endif %}
+    </div>
+    {% if is_self %}
+        <div class="row mt-4">
+            <a class="ml-4" href="{% url 'changepercent' topic.board.pk topic.pk 0 %}"><i class="fa fa-angle-double-left"></i></a>
+            <strong class=" text mx-4">调整进度</strong>
+            <div class="text mr-4">{{ topic.percent }}%</div>
+            <a href="{% url 'changepercent' topic.board.pk topic.pk 1 %}"><i class="fa fa-angle-double-right"></i></a>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
 
 <!--== Page Content Wrapper Start ==-->
 <div id="information">
@@ -144,19 +182,50 @@
                     <!-- Single Sidebar Item Start -->
                     <div class="single-sidebar-wrap">
                         <h2 class="sidebar-title">{% if topic.board.name == '个人创意' %}项目开发团队名单{% elif topic.board.name == '实验室' %}实验室人员名单{% endif %}</h2>
-                        <div class="sidebar-body">
-                            <div class="sidebar-search">
-                                {% for staff in staffs %}
-                                    <h3><a href={% url 'user_account' staff.pk %}><strong>{{ staff.username }}</strong></a></h3>
-                                {% endfor %}
+                        {% if not topic.state == 4 %}
+                            <div class="sidebar-body">
+                                <div class="sidebar-search">
+                                    {% for staff in staffs %}
+                                        <h3><a href={% url 'user_account' staff.pk %}><strong>{{ staff.username }}</strong></a></h3>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        {% if button == 1 %}
-                            <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>点我开团</a>
-                        {% elif button == 2 %}
-                            <button class="btn btn-cart-large my-4" onclick="show_info()"><i class="fa fa-mouse-pointer"></i>点我开团</button>
-                        {% elif button == 3 %}
-                            <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>退出开发团队</a>
+                            {% if button == 1 %}
+                                <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>点我开团</a>
+                            {% elif button == 2 %}
+                                <button class="btn btn-cart-large my-4" onclick="show_info()"><i class="fa fa-mouse-pointer"></i>点我开团</button>
+                            {% elif button == 3 %}
+                                <a href="{% url 'join' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>退出开发团队</a>
+                            {% endif %}
+
+                            {% if topic.board.name == '个人创意' %}
+                                {% if ok == 1 %}
+                                    <button class="btn btn-cart-large my-4" data-toggle="modal" data-target="#confirm"><i class="fa fa-mouse-pointer"></i>确认团队</button>
+                                    <div class="modal fade" id="confirm">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <p>确认团队失败！</p>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>关于本项目您有尚未处理的信件，请处理完毕之后再次确认。</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="#" class="btn btn-primary" data-dismiss="modal">确认</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif ok == 2 %}
+                                    <a href="{% url 'changestate' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>确认团队</a>
+                                {% elif ok == 3 %}
+                                    <a href="{% url 'giveup' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>解散团队</a>
+                                {% elif ok == 4 %}
+                                    <a href="{% url 'submit' topic.board.pk topic.pk %}" class="btn btn-cart-large my-4"><i class="fa fa-mouse-pointer"></i>交付审核</a>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <h1 class="my-4">Disabled!</h1>
                         {% endif %}
                     </div>
                     <!-- Single Sidebar Item End -->
@@ -286,4 +355,46 @@
         <strong>您已发送过申请!</strong> 请耐心等待楼主答复。</div>'
     }
 </script>
+{#<script>#}
+{#$(function(){#}
+{#    var tag = false,ox = 0,left = 0,bgleft = 0;#}
+{#    $('.progress_btn').mousedown(function(e) {#}
+{#        ox = e.pageX - left;#}
+{#        tag = true;#}
+{#    });#}
+{##}
+{#    $(document).mouseup(function() {#}
+{#        tag = false;#}
+{#    });#}
+{##}
+{#    $('.progress').mousemove(function(e) {//鼠标移动#}
+{#        if (tag) {#}
+{#             left = e.pageX - ox;#}
+{#             if (left <= 0) {#}
+{#                left = 0;#}
+{#             }else if (left > 300) {#}
+{#                left = 300;#}
+{#             }#}
+{#            $('.progress_btn').css('left', left);#}
+{#            $('.progress-bar').width(left/300 + '%');#}
+{#            $('.text').html(parseInt((left/300)*100) + '%');#}
+{#        }#}
+{#    });#}
+{##}
+{#    $('.progress_bg').click(function(e) {//鼠标点击#}
+{#         if (!tag) {#}
+{#             bgleft = $('.progress_bg').offset().left;#}
+{#             left = e.pageX - bgleft;#}
+{#             if (left <= 0) {#}
+{#                 left = 0;#}
+{#            }else if (left > 300) {#}
+{#                 left = 300;#}
+{#            }#}
+{#            $('.progress_btn').css('left', left);#}
+{#            $('.progress-bar').animate({width:left/300 + '%'},300);#}
+{#            $('.text').html(parseInt((left/300)*100) + '%');#}
+{#         }#}
+{#    });#}
+{#});#}
+{#</script>#}
 {% endblock %}
