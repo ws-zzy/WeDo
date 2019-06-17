@@ -1,6 +1,3 @@
-# -*- coding:utf-8 -*-
-
-
 def paragraph_dividing(message):
     charlist = list(message)
     i=0

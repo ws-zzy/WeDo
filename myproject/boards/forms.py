@@ -97,6 +97,14 @@ class NewJoinForm(forms.Form):
         max_length=500,
         help_text='最多输入500字符。'
     )
+    联系方式 = forms.CharField(
+        required=True,
+        widget=forms.Textarea(
+            attrs={'rows': 3, 'placeholder': '请给出你的联系方式，方便楼主联系。'}
+        ),
+        max_length=500,
+        help_text='最多输入500字符。'
+    )
 
 
 class NewQuitForm(forms.Form):

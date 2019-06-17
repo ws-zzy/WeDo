@@ -325,7 +325,7 @@ def join(request, pk, topic_pk):
                     letter.message = '亲爱的 ***' + topic.starter.username + '*** 你好，我想要参与开发你发起的 ***' + topic.subject + '*** 项目。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
                                      form.cleaned_data.get(
                                          '加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
-                                     '\r\n\r\n希望能得到你的同意！'
+                                     '\r\n\r\n***我的联系方式是***：\r\n\r\n' + form.cleaned_data.get('联系方式') + '\r\n\r\n希望能得到你的同意！'
                     letter.save()
                 elif topic.board.name == '实验室':
                     letter = Letter.objects.create(from_user=request.user, to_user=topic.starter, kind=1, topic=topic,
@@ -333,7 +333,7 @@ def join(request, pk, topic_pk):
                     letter.message = '尊敬的 ***' + topic.starter.username + '*** 同学你好，我想要加入 ***' + topic.subject + '*** 实验室。\r\n\r\n' + '***我加入的原因是***：\r\n\r\n' + \
                                      form.cleaned_data.get(
                                          '加入原因') + '\r\n\r\n***我的技能有***：\r\n\r\n' + form.cleaned_data.get('我的技能') + \
-                                     '\r\n\r\n希望能得到你的同意！'
+                                     '\r\n\r\n***我的联系方式是***：\r\n\r\n' + form.cleaned_data.get('联系方式') + '\r\n\r\n希望能得到你的同意！'
                     letter.save()
                 return redirect(topic_url)
         else:
@@ -501,6 +501,8 @@ def submit(request, pk, topic_pk):
                 letter.message = '***' + topic.subject + \
                                  '*** 项目的管理员发起了审核请求。\r\n\r\n***留言***：\r\n\r\n' + form.cleaned_data.get('留言')
                 letter.save()
+                topic.state += 1 # 进入审核状态
+                topic.save()
             return redirect(url)
     else:
         form = NewSubmitForm()

@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 # DFA算法
 class DFAFilter(object):
     def __init__(self):
@@ -45,7 +43,7 @@ class DFAFilter(object):
     def filter(_message, repl="▇"):
         if not _message:
             return _message
-        f = open("./templates/sensitive_dict.txt", "r")
+        f = open("./templates/sensitive_dict.txt", "r", encoding='gbk')
         data = f.read()
         keyword_chains = eval(data)
         f.close()

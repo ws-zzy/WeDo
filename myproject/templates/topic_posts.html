@@ -41,12 +41,14 @@
         {% endif %}{% endif %}{% endif %}
     </div>
     {% if is_self %}
-        <div class="row mt-4">
-            <a class="ml-4" href="{% url 'changepercent' topic.board.pk topic.pk 0 %}"><i class="fa fa-angle-double-left"></i></a>
-            <strong class=" text mx-4">调整进度</strong>
-            <div class="text mr-4">{{ topic.percent }}%</div>
-            <a href="{% url 'changepercent' topic.board.pk topic.pk 1 %}"><i class="fa fa-angle-double-right"></i></a>
-        </div>
+        {% if not topic.state >= 2 %}
+            <div class="row mt-4">
+                <a class="ml-4" href="{% url 'changepercent' topic.board.pk topic.pk 0 %}"><i class="fa fa-angle-double-left"></i></a>
+                <strong class=" text mx-4">调整进度</strong>
+                <div class="text mr-4">{{ topic.percent }}%</div>
+                <a href="{% url 'changepercent' topic.board.pk topic.pk 1 %}"><i class="fa fa-angle-double-right"></i></a>
+            </div>
+        {% endif %}
     {% endif %}
 </div>
 {% endif %}

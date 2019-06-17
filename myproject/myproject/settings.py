@@ -143,14 +143,14 @@ LOGIN_REDIRECT_URL = 'home'
 
 
 # SMTP服务器，改为你的邮箱的smtp!
-EMAIL_HOST = 'smtp.buaa.edu.cn'
+EMAIL_HOST = 'smtp.163.com'
 # 改为你自己的邮箱名！
-EMAIL_HOST_USER = 'cuna1997@buaa.edu.cn'
+EMAIL_HOST_USER = 'yy350912076@163.com'
 # 你的邮箱密码
-EMAIL_HOST_PASSWORD = '12345^&*()asd'
+EMAIL_HOST_PASSWORD = 'z1z2z3z4z5z6'
 # 发送邮件的端口
-EMAIL_PORT = 25
-# 是否使用 TLS
-EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_USE_TLS = False   #是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
+EMAIL_USE_SSL = True    #是否使用SSL加密，qq企业邮箱要求使
 # 默认的发件人
-DEFAULT_FROM_EMAIL = 'cuna1997@buaa.edu.cn'
+DEFAULT_FROM_EMAIL = '<WeDo开发团队>'
