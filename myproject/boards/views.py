@@ -125,6 +125,11 @@ class PostListView(ListView):
                 kwargs['percent_green'] = '25%'
                 kwargs['percent_yellow'] = '25%'
                 kwargs['percent_red'] = '25%'
+        elif self.topic.state == 2 or self.topic.state == 3:
+            kwargs['percent_blue'] = '25%'
+            kwargs['percent_green'] = '25%'
+            kwargs['percent_yellow'] = '25%'
+            kwargs['percent_red'] = '25%'
         kwargs['button'] = 0 # 未登录：0，加入未发信：1，加入已发信：2，退出未发信：3，退出已发信：4
         kwargs['ok'] = 0 # 未登录或不是发起者：0，有未处理信件：1，无未处理信件：2，项目开始开发但未完成：3，项目开发完成：4，项目已交付审核：5，不显示
         if self.request.user.is_authenticated():
@@ -501,7 +506,7 @@ def submit(request, pk, topic_pk):
                 letter.message = '***' + topic.subject + \
                                  '*** 项目的管理员发起了审核请求。\r\n\r\n***留言***：\r\n\r\n' + form.cleaned_data.get('留言')
                 letter.save()
-                topic.state += 1 # 进入审核状态
+                topic.state = 2 # 进入审核状态
                 topic.save()
             return redirect(url)
     else:

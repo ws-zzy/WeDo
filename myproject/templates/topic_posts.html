@@ -164,6 +164,12 @@
 
                         <div class="post-meta">
                             <h2>{{ topic.subject }}</h2>
+                            {% if topic.board.name == '实验室' %}
+                                <h4>指导老师：{{ topic.teachers }}</h4>
+                                <h4>研究方向：{{ topic.direction }}</h4>
+                            {% elif topic.board.name == '溢出专区' %}
+                                <h4>错误类型：{{ topic.direction }}</h4>
+                            {% endif %}
                             <div class="post-info">
                                 <a href="{{ return_url }}"><i class="fa fa-user" style="color:cornflowerblue"></i> {{ posts.first.created_by.username }}</a>
                                 <a href=javascript:void(0) class="disabled"><i class="fa fa-calendar" style="color:darkseagreen"></i> {{ topic.created_at|naturaltime }}</a>
@@ -208,7 +214,7 @@
                                             {% else %}
                                                 <p style="width: 100px;"></p>
                                             {% endif %}
-                                            <a style="width: 100px;" href="#" class="btn-reply" role="button"><i class="fa fa-reply"></i>回复</a>
+                                            <a style="width: 100px;" href="{% url 'reply_topic' topic.board.pk topic.pk %}" class="btn-reply" role="button"><i class="fa fa-reply"></i>回复</a>
                                         </div>
                                         <a class="comment-date">{{ post.updated_at|naturaltime }}</a>
                                         <p>{{ post.get_message_as_markdown }}</p>

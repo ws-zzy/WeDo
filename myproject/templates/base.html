@@ -91,7 +91,7 @@
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
                                                         <a class="dropdown-item" href="{% url 'my_account' %}">我的账户</a>
                                     
-                                                        <!-- <a class="dropdown-item" href="{% url 'password_change' %}">修改密码</a> -->
+                                                        <a class="dropdown-item" href='{% url "password_reset_recover" %}'>修改密码</a>
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item" href="{% url 'logout'%}">登出</a>
                                                     </div>
@@ -120,7 +120,7 @@
                         <div class="row">
                             <!-- Logo Area Start -->
                             <div class="col-4 col-md-2 col-xl-3 m-auto text-center text-lg-left">
-                                <a href=javascript:void(0) class="logo-wrap d-block">
+                                <a href="{% url 'home' %}" class="logo-wrap d-block">
                                     <img src="{% static 'img/logo.png' %}" alt="Logo" class="img-fluid"/>
                                 </a>
                             </div>
