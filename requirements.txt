@@ -1,5 +1,5 @@
 coverage==4.5.3
-Django==1.11.15
+Django>=1.11.23
 django-coverage==1.2.4
 django-widget-tweaks==1.4.3
 Markdown==3.1
